@@ -18,15 +18,13 @@ public class Usuario {
         NO_REGISTRADO
     }
 
-    public Usuario(String nombre, String apellido, String dni, Integer edad, String telefono, String correoElectronico,
-            Integer limiteDePrestamos) {
+    public Usuario(String nombre, String apellido, String dni, Integer edad, String telefono, String correoElectronico) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.edad = edad;
         this.telefono = telefono;
         this.correoElectronico = correoElectronico;
-        this.limiteDePrestamos = limiteDePrestamos;
 
         this.estado = Estado.NO_REGISTRADO;
     }
@@ -53,6 +51,14 @@ public class Usuario {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public void setLimiteDePrestamos(Integer limiteDePrestamos){
+        if(limiteDePrestamos <= 0){
+            throw new IllegalArgumentException("El limite de prestamos debe ser mayor a cero");
+        }
+
+        this.limiteDePrestamos = limiteDePrestamos;
     }
 
 }
