@@ -1,0 +1,154 @@
+package ar.edu.unahur.obj2.biblioteca;
+
+import java.time.Clock;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import ar.edu.unahur.obj2.libros.Libro;
+import ar.edu.unahur.obj2.usuarios.Usuario;
+
+public class Biblioteca {
+
+    private ArrayList<Libro> catalogo = new ArrayList<>();
+    private Map<String, Usuario> socios = new HashMap<>();
+    private ArrayList<Prestamo> prestamos = new ArrayList<>();
+    private final Clock reloj;
+
+    public Biblioteca(Clock reloj) {
+        this.reloj = reloj;
+    }
+
+    public void asociarUsuario(Usuario usuario, Integer limiteDePrestamos){
+    
+        if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no puede ser null.");
+        }
+
+        if (usuario.getEstado() != Usuario.Estado.NO_REGISTRADO) {
+            throw new UsuarioNoAsociableException("Solo se puede asociar por primera vez a un usuario no registrado.");
+        }
+
+        if (socios.containsKey(usuario.getDni())) {
+            throw new UsuarioYaRegistradoException("Ya existe un socio con ese DNI.");
+        }
+
+        usuario.setEstado(Usuario.Estado.ACTIVO);
+        usuario.setLimiteDePrestamos(limiteDePrestamos);
+        socios.put(usuario.getDni(), usuario);
+
+    }
+
+    public void reasociarUsuario(String dniUsuario){
+        Usuario usuario = socios.get(dniUsuario);
+
+        if(usuario == null){
+            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado.");
+        }
+
+        if(usuario.getEstado() != Usuario.Estado.BAJA_VOLUNTARIA){
+            throw new UsuarioNoReasociableException("Solamente se permite reasociar a los usuarios con baja voluntaria");
+        }
+
+        usuario.setEstado(Usuario.Estado.ACTIVO);
+
+    }
+
+    public void desasociarUsuario(String dniUsuario){
+        Usuario usuario = socios.get(dniUsuario);
+
+        if(usuario == null){
+            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado.");
+        }
+
+        if(usuario.getEstado() != Usuario.Estado.ACTIVO){
+            throw new UsuarioInactivoException("El usuario no se encuentra activo.");
+        }
+
+        usuario.setEstado(Usuario.Estado.BAJA_VOLUNTARIA);
+    }
+
+    public void inhabilitarUsuario(String dniUsuario){
+        Usuario usuario = socios.get(dniUsuario);
+
+        if(usuario == null){
+            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado.");
+        }
+
+        if(usuario.getEstado() == Usuario.Estado.INHABILITADO){
+            throw new UsuarioInhabilitadoException("El usuario ya se encuentra inhabilitado.");
+        }
+
+        usuario.setEstado(Usuario.Estado.INHABILITADO);
+    }
+
+    public void evaluarUsuarios(){
+        socios.forEach((dni, usuario) -> {
+            if(esBajaAutomatica(usuario)){
+                inhabilitarUsuario(dni);
+            }
+        }
+        );
+    }
+
+    public Boolean esBajaAutomatica(Usuario usuario){
+        ArrayList<Prestamo> prestamosDelUsuario = obtenerPrestamosDelUsuario(usuario);
+
+        return acumulaPrestamosVencidos(prestamosDelUsuario) || (unEjemplarNoHaSidoDevuelto(prestamosDelUsuario));
+    }
+
+    public Boolean unEjemplarNoHaSidoDevuelto(ArrayList<Prestamo> prestamosDelUsuario){
+        LocalDate hoy = LocalDate.now(reloj);
+
+        return prestamosDelUsuario.stream()
+                .filter(prestamo -> prestamo.getEstado() == Prestamo.Estado.EN_CURSO)
+                .anyMatch(prestamo -> {
+                            return hoy.isAfter(prestamo.getFechaLimite().plusDays(7));
+                }
+        );
+    }       
+
+    public Boolean acumulaPrestamosVencidos(ArrayList<Prestamo> prestamosDelUsuario){
+
+        Integer cantidadDePrestamosVencidos = (int) prestamosDelUsuario.stream()
+                .filter(prestamo -> prestamo.getEstado().equals(Prestamo.Estado.FINALIZADO))
+                .filter(prestamo -> prestamo.getFechaDeDevolucion() != null)
+                .filter(prestamo -> prestamo.getFechaDeDevolucion().after(prestamo.getFechaLimite()))
+                .count();
+
+        return cantidadDePrestamosVencidos >= 3;
+    }
+
+    public ArrayList<Prestamo> obtenerPrestamosDelUsuario(Usuario usuario){
+        return prestamos.stream()
+                .filter(prestamo -> prestamo.getUsuario() == usuario)
+                .colletc(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void renovarPrestamo(Prestamo prestamo){
+        LocalDate hoy = LocalDate.now(reloj);
+
+        if(prestamo.getEstado() != Prestamo.Estado.EN_CURSO){
+            throw new PrestamoFinalizadoException("El prestamo debe estar en curso.");
+        }
+
+        if(prestamo.estaVencido()){
+            throw new PrestamoVencidoException("El prestamo se encuentra vencido.");
+        }
+
+        if(!(!hoy.isBefore(prestamo.getFechaLimite().minusDays(2)) && !hoy.isAfter(prestamo.getFechaLimite()))){
+            throw new PrestamoNoRenovableException("El prestamo no puede ser renovado fuera de fecha.");
+        }
+
+        if(prestamo.renovacionesDisponible() == 0){
+            throw new PrestamoSinRenovacionesDisponiblesException("El prestamo no cuenta con renovaciones disponibles.");
+        }
+        
+        prestamo.setFechaLimite(prestamo.getFechaLimite().plusDays(7));
+        prestamo.descontarRenovacion();
+
+    }
+
+}
