@@ -7,7 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
+import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
+import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException;
+import ar.edu.unahur.obj2.exceptions.PrestamoVencidoException;
+import ar.edu.unahur.obj2.exceptions.UsuarioInactivoException;
+import ar.edu.unahur.obj2.exceptions.UsuarioInhabilitadoException;
+import ar.edu.unahur.obj2.exceptions.UsuarioNoAsociableException;
+import ar.edu.unahur.obj2.exceptions.UsuarioNoReasociableException;
+import ar.edu.unahur.obj2.exceptions.UsuarioNoRegistradoException;
+import ar.edu.unahur.obj2.exceptions.UsuarioYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
+import ar.edu.unahur.obj2.prestamos.Prestamo;
 import ar.edu.unahur.obj2.usuarios.Usuario;
 
 public class Biblioteca {
@@ -115,7 +126,7 @@ public class Biblioteca {
         Integer cantidadDePrestamosVencidos = (int) prestamosDelUsuario.stream()
                 .filter(prestamo -> prestamo.getEstado().equals(Prestamo.Estado.FINALIZADO))
                 .filter(prestamo -> prestamo.getFechaDeDevolucion() != null)
-                .filter(prestamo -> prestamo.getFechaDeDevolucion().after(prestamo.getFechaLimite()))
+                .filter(prestamo -> prestamo.getFechaDeDevolucion().isAfter(prestamo.getFechaLimite()))
                 .count();
 
         return cantidadDePrestamosVencidos >= 3;
@@ -123,8 +134,8 @@ public class Biblioteca {
 
     public ArrayList<Prestamo> obtenerPrestamosDelUsuario(Usuario usuario){
         return prestamos.stream()
-                .filter(prestamo -> prestamo.getUsuario() == usuario)
-                .colletc(Collectors.toCollection(ArrayList::new));
+                .filter(prestamo -> prestamo.getSocio() == usuario)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void renovarPrestamo(Prestamo prestamo){
@@ -134,7 +145,7 @@ public class Biblioteca {
             throw new PrestamoFinalizadoException("El prestamo debe estar en curso.");
         }
 
-        if(prestamo.estaVencido()){
+        if(prestamo.estaVencido(hoy)){
             throw new PrestamoVencidoException("El prestamo se encuentra vencido.");
         }
 
@@ -142,7 +153,7 @@ public class Biblioteca {
             throw new PrestamoNoRenovableException("El prestamo no puede ser renovado fuera de fecha.");
         }
 
-        if(prestamo.renovacionesDisponible() == 0){
+        if(prestamo.getCantidadDeRenovaciones() == 0){
             throw new PrestamoSinRenovacionesDisponiblesException("El prestamo no cuenta con renovaciones disponibles.");
         }
         
