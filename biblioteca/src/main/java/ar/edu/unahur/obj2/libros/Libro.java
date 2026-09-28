@@ -1,6 +1,6 @@
 package ar.edu.unahur.obj2.libros;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Libro {
 
@@ -9,7 +9,7 @@ public class Libro {
     private String titulo;
     private String autor;
     private Categoria categoria;
-    private Date fechaDePublicacion;
+    private LocalDate fechaDePublicacion;
     private Estado estado;
     private Integer id = 0;
     private Integer cantidadDepaginas;
@@ -57,7 +57,7 @@ public class Libro {
         TERROR
     }
 
-    public Libro(String titulo, String autor, Categoria categoria, Date fechaDePublicacion,
+    public Libro(String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
             Integer cantidadDepaginas, Idioma idioma) {
         this.titulo = titulo;
         this.autor = autor;
