@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="prestamos.PrestamoTest" time="0.014" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="biblioteca.BibliotecaTest" time="0.3" tests="26" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,8 +58,30 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="deberiaEstarVencido_SiLaFechaActualSuperaLaFechaLimite" classname="prestamos.PrestamoTest" time="0.002"/>
-  <testcase name="deberiaSerUnPrestamoEnCursoApenasSeInstancia" classname="prestamos.PrestamoTest" time="0.002"/>
-  <testcase name="deberiaEstarFinalizado_SiSeDevuelve" classname="prestamos.PrestamoTest" time="0.001"/>
-  <testcase name="noDeberiaEstarVencido_SiAunNoHaPasadoLaFechaLimite" classname="prestamos.PrestamoTest" time="0.001"/>
+  <testcase name="unPrestamoDeberiaEstarEnCurso_SiSeOtorgaAUnUsuario" classname="biblioteca.BibliotecaTest" time="0.14"/>
+  <testcase name="noDeberiaOtorgarUnPrestamo_SiUnEJemplarNoExiste" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="unUsuarioNoInfringeLasNormas_SiDevuelveSusPrestamosATiempoYNoConservaNingunLibro" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="noDeberiaOtorgarUnPrestamo_SiElUsuarioInfringeLasNormas" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="deberiaAlargarUnaSemanaLaFechaLimiteAlRenovarElPrestamo" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="deberiaAsociarUnUsarioNoRegistrado" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="noDeberiaOtorgarUnPrestamo_SiElUsuarioNoEstaActivo" classname="biblioteca.BibliotecaTest" time="0.005"/>
+  <testcase name="noDeberiaOtorgarUnPrestamo_SiElEJemplarNoSeEncuentraDisponible" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="noDeberiaInhabilitarUnUsuario_SiYaSeEncuentraInhabilitado" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="deberiaDescontarUnaRenovacionDeUnPrestamo" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="deberiaObtenerUnUsuarioRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="noDeberiaReasociarUnUsuario_SiNoSeEncuentraRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="noDeberiaOtorgarUnPrestamo_SiElUsuarioAlcanzoSuLimiteDePrestamos" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="unUsuarioInfringeLasNormas_SiDevolvioUnEjemplarVencidoEnVariasOcasiones" classname="biblioteca.BibliotecaTest" time="0.001"/>
+  <testcase name="deberiaInhabilitarUnUsuario" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="noDeberiaInhabilitarUnUsuario_SiElUsuarioNoEstaRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="deberiaOtorgarUnPrestamoAUnUsuarioRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="noDeberiaReasociarUnUsuario_SiNoSeEncuentraConBajaVoluntaria" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="noDeberiaDesasociarUnUsuario_SiEsteNoEstaRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="deberiaFinalizarseUnPrestamo" classname="biblioteca.BibliotecaTest" time="0.001"/>
+  <testcase name="noDeberiaAsociarAUnUsuario_SiYaFueAsociado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="deberiaReasociarAUnUsuario" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="deberiaCambiarElEstadoDeUnUsuario_SiSeLoDesasocia" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="unUsuarioInfringeLasNormas_SiNoHaDevueltoUnEjemplarLuegoDeUnaSemanaDeSuFechaLimite" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="noDeberiaDesasociarUnUsuario_SiNoSeEncuentraActivo" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="unEjemplarFiguraDisponible_SiSeFinalizaSuPrestamo" classname="biblioteca.BibliotecaTest" time="0.002"/>
 </testsuite>

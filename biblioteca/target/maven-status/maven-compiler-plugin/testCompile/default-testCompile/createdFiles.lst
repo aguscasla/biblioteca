@@ -1,1 +1,4 @@
+biblioteca\BibliotecaTest.class
 MainTest.class
+prestamos\PrestamoTest.class
+usuarios\UsuarioTest.class

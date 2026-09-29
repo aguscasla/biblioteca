@@ -15,7 +15,6 @@ import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException
 import ar.edu.unahur.obj2.exceptions.PrestamoVencidoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioInactivoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioInhabilitadoException;
-import ar.edu.unahur.obj2.exceptions.UsuarioNoAsociableException;
 import ar.edu.unahur.obj2.exceptions.UsuarioNoReasociableException;
 import ar.edu.unahur.obj2.exceptions.UsuarioNoRegistradoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioSinPrestamosDisponiblesException;
@@ -41,12 +40,8 @@ public class Biblioteca {
             throw new IllegalArgumentException("El usuario no puede ser null.");
         }
 
-        if (usuario.getEstado() != Usuario.Estado.NO_REGISTRADO) {
-            throw new UsuarioNoAsociableException("Solo se puede asociar por primera vez a un usuario no registrado.");
-        }
-
         if (socios.containsKey(usuario.getDni())) {
-            throw new UsuarioYaRegistradoException("Ya existe un socio con ese DNI.");
+            throw new UsuarioYaRegistradoException("El usuario ya se encuentra registrado.");
         }
 
         usuario.setEstado(Usuario.Estado.ACTIVO);
@@ -96,6 +91,16 @@ public class Biblioteca {
         }
 
         usuario.setEstado(Usuario.Estado.INHABILITADO);
+    }
+
+    public Usuario obtenerUsuario(String dniDelUsuario){
+        Usuario usuario = socios.get(dniDelUsuario);
+
+        if(usuario == null){
+            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado");
+        }
+
+        return usuario;
     }
 
     public void evaluarUsuarios(){
@@ -217,5 +222,19 @@ public class Biblioteca {
 
         return prestamo;
     }
+
+    public ArrayList<Libro> getCatalogo() {
+        return catalogo;
+    }
+
+    public Map<String, Usuario> getSocios() {
+        return socios;
+    }
+
+    public ArrayList<Prestamo> getPrestamos() {
+        return prestamos;
+    }
+
+    
 
 }
