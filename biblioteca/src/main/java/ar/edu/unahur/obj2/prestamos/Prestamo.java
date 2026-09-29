@@ -60,12 +60,20 @@ public class Prestamo {
         return cantidadDeRenovaciones;
     }
 
+    public Libro getEjemplar(){
+        return ejemplar;
+    }
+
     public void setFechaLimite(LocalDate fechaLimite) {
         this.fechaLimite = fechaLimite;
     }
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public void setFechaDeDevolucion(LocalDate fechaDeDevolucion) {
+        this.fechaDeDevolucion = fechaDeDevolucion;
     }
     
 }

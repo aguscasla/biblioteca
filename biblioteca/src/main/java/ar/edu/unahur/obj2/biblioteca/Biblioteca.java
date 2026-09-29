@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import ar.edu.unahur.obj2.exceptions.LibroInexistenteException;
+import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
 import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException;
@@ -16,6 +18,7 @@ import ar.edu.unahur.obj2.exceptions.UsuarioInhabilitadoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioNoAsociableException;
 import ar.edu.unahur.obj2.exceptions.UsuarioNoReasociableException;
 import ar.edu.unahur.obj2.exceptions.UsuarioNoRegistradoException;
+import ar.edu.unahur.obj2.exceptions.UsuarioSinPrestamosDisponiblesException;
 import ar.edu.unahur.obj2.exceptions.UsuarioYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
 import ar.edu.unahur.obj2.prestamos.Prestamo;
@@ -97,14 +100,14 @@ public class Biblioteca {
 
     public void evaluarUsuarios(){
         socios.forEach((dni, usuario) -> {
-            if(esBajaAutomatica(usuario)){
+            if(estaInfringiendoLasNormas(usuario)){
                 inhabilitarUsuario(dni);
             }
         }
         );
     }
 
-    public Boolean esBajaAutomatica(Usuario usuario){
+    public Boolean estaInfringiendoLasNormas(Usuario usuario){
         ArrayList<Prestamo> prestamosDelUsuario = obtenerPrestamosDelUsuario(usuario);
 
         return acumulaPrestamosVencidos(prestamosDelUsuario) || (unEjemplarNoHaSidoDevuelto(prestamosDelUsuario));
@@ -160,6 +163,58 @@ public class Biblioteca {
         prestamo.setFechaLimite(prestamo.getFechaLimite().plusDays(7));
         prestamo.descontarRenovacion();
 
+    }
+
+    public void finalizarPrestamo(Prestamo prestamo){
+        LocalDate hoy = LocalDate.now(reloj);
+        Libro ejemplarDevuelto = prestamo.getEjemplar();
+
+        prestamo.setEstado(Prestamo.Estado.FINALIZADO);
+        prestamo.setFechaDeDevolucion(hoy);
+        ejemplarDevuelto.cambiarEstado(Libro.Estado.DISPONIBLE);
+
+    }
+
+    public void validarPrestamo(Prestamo prestamo, Usuario socio){
+        ArrayList<Prestamo> prestamos = obtenerPrestamosDelUsuario(socio);
+
+        if(estaInfringiendoLasNormas(socio)){
+            throw new UsuarioInhabilitadoException("El usuario no se encuentra habilitado para solicitar un prestamo.");
+        }
+
+        if(socio.getEstado() != Usuario.Estado.ACTIVO){
+            throw new UsuarioInactivoException("El usuario no se encuentra activo");
+        }
+
+        if(socio.getLimiteDePrestamos() == prestamosEnCursoDelUsuario(socio).size()) {
+            throw new UsuarioSinPrestamosDisponiblesException("El usuario alcanzo el limite de prestamos.");
+        }
+
+        if(prestamo.getEjemplar() == null){
+            throw new LibroInexistenteException("El libro no existe.");
+        }
+
+        if(prestamo.getEjemplar().getEstado() != Libro.Estado.DISPONIBLE){
+            throw new LibroNoDisponibleException("El libro no se encuentra disponible.");
+        }
+
+    }
+
+    public ArrayList<Prestamo> prestamosEnCursoDelUsuario(Usuario socio){
+        return prestamos.stream()
+                .filter(prestamo -> prestamo.getSocio() == socio && prestamo.getEstado() == Prestamo.Estado.EN_CURSO)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Prestamo otorgarPrestamo(Integer idDelPrestamo, Usuario socio, Libro ejemplar, LocalDate fechaDeInicio,
+                                        LocalDate fechaDeLimite, Integer cantidadDeRenovaciones){
+
+        Prestamo prestamo = new Prestamo(idDelPrestamo, socio, ejemplar, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);
+
+        validarPrestamo(prestamo, socio);
+        ejemplar.cambiarEstado(Libro.Estado.PRESTADO);
+
+        return prestamo;
     }
 
 }
