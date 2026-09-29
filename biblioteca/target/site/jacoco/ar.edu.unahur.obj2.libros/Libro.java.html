@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Libro.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">biblioteca</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unahur.obj2.libros</a> &gt; <span class="el_source">Libro.java</span></div><h1>Libro.java</h1><pre class="source lang-java linenums">package ar.edu.unahur.obj2.libros;
+
+import java.time.LocalDate;
+
+public class Libro {
+
+<span class="fc" id="L7">    private static Integer siguienteId = 1;</span>
+
+    private String titulo;
+    private String autor;
+    private Categoria categoria;
+    private LocalDate fechaDePublicacion;
+    private Estado estado;
+<span class="fc" id="L14">    private Integer id = 0;</span>
+    private Integer cantidadDepaginas;
+    private Idioma idioma;
+
+<span class="fc" id="L18">    public enum Estado {</span>
+<span class="fc" id="L19">        DISPONIBLE,</span>
+<span class="fc" id="L20">        PRESTADO,</span>
+<span class="fc" id="L21">        EN_REPARACION,</span>
+<span class="fc" id="L22">        INHABILITADO</span>
+    }
+
+<span class="nc" id="L25">    public enum Idioma {</span>
+<span class="nc" id="L26">        INGLES,</span>
+<span class="nc" id="L27">        CASTELLANO,</span>
+<span class="nc" id="L28">        PORTUGUES,</span>
+<span class="nc" id="L29">        ITALIANO,</span>
+<span class="nc" id="L30">        FRANCES</span>
+    }
+
+<span class="nc" id="L33">    public enum Categoria {</span>
+<span class="nc" id="L34">        ACADEMICO,</span>
+<span class="nc" id="L35">        ARTE_Y_DISENO,</span>
+<span class="nc" id="L36">        AUTOAYUDA,</span>
+<span class="nc" id="L37">        BIOGRAFIA,</span>
+<span class="nc" id="L38">        CIENCIA,</span>
+<span class="nc" id="L39">        CIENCIA_FICCION,</span>
+<span class="nc" id="L40">        COMIC_Y_MANGA,</span>
+<span class="nc" id="L41">        DESARROLLO_PERSONAL,</span>
+<span class="nc" id="L42">        ECONOMIA_Y_NEGOCIOS,</span>
+<span class="nc" id="L43">        ENSAYO,</span>
+<span class="nc" id="L44">        FANTASIA,</span>
+<span class="nc" id="L45">        FILOSOFIA,</span>
+<span class="nc" id="L46">        GASTRONOMIA,</span>
+<span class="nc" id="L47">        HISTORIA,</span>
+<span class="nc" id="L48">        INFANTIL_Y_JUVENIL,</span>
+<span class="nc" id="L49">        INFORMATICA_Y_TECNOLOGIA,</span>
+<span class="nc" id="L50">        LITERATURA,</span>
+<span class="nc" id="L51">        MANUALES_Y_TECNICOS,</span>
+<span class="nc" id="L52">        MISTERIO_Y_POLICIAL,</span>
+<span class="nc" id="L53">        NOVELA_HISTORICA,</span>
+<span class="nc" id="L54">        POESIA_Y_TEATRO,</span>
+<span class="nc" id="L55">        ROMANCE,</span>
+<span class="nc" id="L56">        SALUD_Y_BIENESTAR,</span>
+<span class="nc" id="L57">        TERROR</span>
+    }
+
+    public Libro(String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
+<span class="fc" id="L61">            Integer cantidadDepaginas, Idioma idioma) {</span>
+<span class="fc" id="L62">        this.titulo = titulo;</span>
+<span class="fc" id="L63">        this.autor = autor;</span>
+<span class="fc" id="L64">        this.categoria = categoria;</span>
+<span class="fc" id="L65">        this.fechaDePublicacion = fechaDePublicacion;</span>
+<span class="fc" id="L66">        this.cantidadDepaginas = cantidadDepaginas;</span>
+<span class="fc" id="L67">        this.idioma = idioma;</span>
+
+<span class="fc" id="L69">        this.estado = Estado.DISPONIBLE;</span>
+<span class="fc" id="L70">        this.id = siguienteId++;</span>
+<span class="fc" id="L71">    }</span>
+
+    public void cambiarEstado(Estado estado){
+<span class="fc" id="L74">        this.estado = estado;</span>
+<span class="fc" id="L75">    }</span>
+
+    public Estado getEstado(){
+<span class="nc" id="L78">        return estado;</span>
+    }
+
+    public Integer getId(){
+<span class="nc" id="L82">        return id;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

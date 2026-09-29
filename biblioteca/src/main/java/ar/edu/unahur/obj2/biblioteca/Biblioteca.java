@@ -213,6 +213,7 @@ public class Biblioteca {
 
         validarPrestamo(prestamo, socio);
         ejemplar.cambiarEstado(Libro.Estado.PRESTADO);
+        prestamos.add(prestamo);
 
         return prestamo;
     }
