@@ -36,8 +36,8 @@ public class Biblioteca {
 
     public void asociarUsuario(Usuario usuario, Integer limiteDePrestamos){
     
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (usuario == null) {</span>
-<span class="nc" id="L40">            throw new IllegalArgumentException(&quot;El usuario no puede ser null.&quot;);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (usuario == null) {</span>
+<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;El usuario no puede ser null.&quot;);</span>
         }
 
 <span class="fc bfc" id="L43" title="All 2 branches covered.">        if (socios.containsKey(usuario.getDni())) {</span>
@@ -96,21 +96,21 @@ public class Biblioteca {
     public Usuario obtenerUsuario(String dniDelUsuario){
 <span class="fc" id="L97">        Usuario usuario = socios.get(dniDelUsuario);</span>
 
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if(usuario == null){</span>
-<span class="nc" id="L100">            throw new UsuarioNoRegistradoException(&quot;El usuario no se encuentra registrado&quot;);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if(usuario == null){</span>
+<span class="fc" id="L100">            throw new UsuarioNoRegistradoException(&quot;El usuario no se encuentra registrado&quot;);</span>
         }
 
 <span class="fc" id="L103">        return usuario;</span>
     }
 
     public void evaluarUsuarios(){
-<span class="nc" id="L107">        socios.forEach((dni, usuario) -&gt; {</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">            if(estaInfringiendoLasNormas(usuario)){</span>
-<span class="nc" id="L109">                inhabilitarUsuario(dni);</span>
+<span class="fc" id="L107">        socios.forEach((dni, usuario) -&gt; {</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            if(estaInfringiendoLasNormas(usuario)){</span>
+<span class="fc" id="L109">                inhabilitarUsuario(dni);</span>
             }
-<span class="nc" id="L111">        }</span>
+<span class="fc" id="L111">        }</span>
         );
-<span class="nc" id="L113">    }</span>
+<span class="fc" id="L113">    }</span>
 
     public Boolean estaInfringiendoLasNormas(Usuario usuario){
 <span class="fc" id="L116">        ArrayList&lt;Prestamo&gt; prestamosDelUsuario = obtenerPrestamosDelUsuario(usuario);</span>
@@ -142,7 +142,7 @@ public class Biblioteca {
 
     public ArrayList&lt;Prestamo&gt; obtenerPrestamosDelUsuario(Usuario usuario){
 <span class="fc" id="L144">        return prestamos.stream()</span>
-<span class="pc bpc" id="L145" title="1 of 2 branches missed.">                .filter(prestamo -&gt; prestamo.getSocio() == usuario)</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                .filter(prestamo -&gt; prestamo.getSocio() == usuario)</span>
 <span class="fc" id="L146">                .collect(Collectors.toCollection(ArrayList::new));</span>
     }
 
@@ -207,7 +207,7 @@ public class Biblioteca {
 
     public ArrayList&lt;Prestamo&gt; prestamosEnCursoDelUsuario(Usuario socio){
 <span class="fc" id="L209">        return prestamos.stream()</span>
-<span class="pc bpc" id="L210" title="1 of 4 branches missed.">                .filter(prestamo -&gt; prestamo.getSocio() == socio &amp;&amp; prestamo.getEstado() == Prestamo.Estado.EN_CURSO)</span>
+<span class="fc bfc" id="L210" title="All 4 branches covered.">                .filter(prestamo -&gt; prestamo.getSocio() == socio &amp;&amp; prestamo.getEstado() == Prestamo.Estado.EN_CURSO)</span>
 <span class="fc" id="L211">                .collect(Collectors.toCollection(ArrayList::new));</span>
     }
 

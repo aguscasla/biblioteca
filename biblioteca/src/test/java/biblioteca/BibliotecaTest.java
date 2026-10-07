@@ -1,5 +1,6 @@
 package biblioteca;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,6 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,13 +34,17 @@ public class BibliotecaTest {
     private Usuario usuario;
     private Biblioteca biblioteca;
     private Libro libro;
+
+    LocalDateTime fechaFija = LocalDateTime.of(2026, 9, 29, 12, 0, 0);
+    ZoneId zonaHoraria = ZoneId.systemDefault();
+    ZonedDateTime fechaZonificada = fechaFija.atZone(zonaHoraria);
     
     @BeforeEach 
     void setUp(){
         usuario = new Usuario("Agustina", "Aguero", "46787883", 
             20, "3755578920", "agusagueroo89@gmail.com");
         
-        biblioteca = new Biblioteca(Clock.systemDefaultZone());
+        biblioteca = new Biblioteca(Clock.fixed(fechaZonificada.toInstant(), zonaHoraria));
 
         libro = new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, 
             LocalDate.of(2008, 8, 1), 
@@ -288,4 +297,67 @@ public class BibliotecaTest {
         assertEquals(LocalDate.of(2026, 10, 7), prestamo.getFechaLimite());
     }
 
+    @Test 
+    void noDeberiaAsociarUnUsuario_SiLePasanUnUsuarioConValorNulo(){
+        assertThrows(IllegalArgumentException.class, () -> biblioteca.asociarUsuario(null, 1));
+    }
+
+    @Test 
+    void noDeberiaObtenerUnUsuario_SiElUsuarioNoEstaRegistrado(){
+        assertThrows(UsuarioNoRegistradoException.class, () -> biblioteca.obtenerUsuario("46787883"));
+    }
+
+    @Test 
+    void noDeberiaDarDeBajaANingunUsuario_SiNingunoInclumpleLasNormasAlEvaluarlo(){
+        Usuario usuario2 = new Usuario("Edu", "Aguero", "12566044", 69, 
+            "3755578920", "ed@gmail.com");
+        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+            LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES);
+
+        biblioteca.asociarUsuario(usuario, 2);
+        biblioteca.asociarUsuario(usuario2, 2);
+
+        Map<String, Usuario> usuariosAComparar = Map.of("46787883", usuario, "12566044", usuario2);
+
+        Prestamo prestamo = biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 1), 
+        LocalDate.of(2026, 9, 25), 0);
+
+        Prestamo prestamo2 = biblioteca.otorgarPrestamo(2, usuario2, libro2, LocalDate.of(2026, 9, 1), 
+        LocalDate.of(2026, 9, 25), 0);
+
+        biblioteca.finalizarPrestamo(prestamo);
+        biblioteca.finalizarPrestamo(prestamo2);
+
+        biblioteca.evaluarUsuarios();
+        
+        assertAll(
+            () -> assertEquals(Usuario.Estado.ACTIVO, biblioteca.obtenerUsuario("46787883").getEstado()),
+            () -> assertEquals(Usuario.Estado.ACTIVO, biblioteca.obtenerUsuario("12566044").getEstado())
+        );
+    }
+
+    @Test 
+    void deberiaInhabilitarAUnUsuario_SiEsteNoCumpleLasNormasAlEvaluarlo(){
+        Usuario usuario2 = new Usuario("Edu", "Aguero", "12566044", 69, 
+            "3755578920", "ed@gmail.com");
+        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+            LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES);
+
+        biblioteca.asociarUsuario(usuario, 2);
+        biblioteca.asociarUsuario(usuario2, 2);
+
+        Map<String, Usuario> usuariosAComparar = Map.of("12566044", usuario2);
+
+        biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 1), 
+            LocalDate.of(2026, 9, 20), 0);
+
+        Prestamo prestamo2 = biblioteca.otorgarPrestamo(2, usuario2, libro2, LocalDate.of(2026, 9, 1), 
+        LocalDate.of(2026, 9, 25), 0);
+
+        biblioteca.finalizarPrestamo(prestamo2);
+
+        biblioteca.evaluarUsuarios();
+
+        assertEquals(Usuario.Estado.INHABILITADO, biblioteca.obtenerUsuario("46787883").getEstado());
+    }
 }
