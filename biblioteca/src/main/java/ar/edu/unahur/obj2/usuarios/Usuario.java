@@ -1,5 +1,7 @@
 package ar.edu.unahur.obj2.usuarios;
 
+import java.util.Objects;
+
 public class Usuario {
 
     private String nombre;
@@ -19,13 +21,14 @@ public class Usuario {
     }
 
     public Usuario(String nombre, String apellido, String dni, Integer edad, String telefono, String correoElectronico) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.dni = dni;
-        this.edad = edad;
-        this.telefono = telefono;
-        this.correoElectronico = correoElectronico;
+        this.nombre = Objects.requireNonNull(nombre, "El nombre es obligatorio");
+        this.apellido = Objects.requireNonNull(apellido, "El apellido es obligatorio");
+        this.dni = Objects.requireNonNull(dni, "El dni es obligatorio");
+        this.edad = Objects.requireNonNull(edad, "La edad es obligatorio");
+        this.telefono = Objects.requireNonNull(telefono, "El telefono es obligatorio");
+        this.correoElectronico = Objects.requireNonNull(correoElectronico, "El correo electronico es obligatorio");
 
+        this.limiteDePrestamos = 0;
         this.estado = Estado.NO_REGISTRADO;
     }
 
@@ -49,16 +52,28 @@ public class Usuario {
         return estado;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void darDeAlta(){
+        this.estado = Estado.ACTIVO;
     }
 
-    public void setLimiteDePrestamos(Integer limiteDePrestamos){
-        if(limiteDePrestamos <= 0){
-            throw new IllegalArgumentException("El limite de prestamos debe ser mayor a cero");
-        }
+    public void inhabilitar(){
+        this.estado = Estado.INHABILITADO;
+    }
 
-        this.limiteDePrestamos = limiteDePrestamos;
+    public void darBajaVoluntaria(){
+        this.estado = Estado.BAJA_VOLUNTARIA;
+    }
+
+    public Integer getEdad() {
+        return edad;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
     }
 
 }
