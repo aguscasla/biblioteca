@@ -1,6 +1,9 @@
 package ar.edu.unahur.obj2.libros;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
+import ar.edu.unahur.obj2.exceptions.LibroInhabilitadoException;
 
 public class Libro {
 
@@ -12,7 +15,7 @@ public class Libro {
     private LocalDate fechaDePublicacion;
     private Estado estado;
     private Integer id = 0;
-    private Integer cantidadDepaginas;
+    private Integer cantidadDePaginas;
     private Idioma idioma;
 
     public enum Estado {
@@ -58,20 +61,41 @@ public class Libro {
     }
 
     public Libro(String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
-            Integer cantidadDepaginas, Idioma idioma) {
-        this.titulo = titulo;
-        this.autor = autor;
-        this.categoria = categoria;
-        this.fechaDePublicacion = fechaDePublicacion;
-        this.cantidadDepaginas = cantidadDepaginas;
-        this.idioma = idioma;
+            Integer cantidadDePaginas, Idioma idioma) {
+
+        if(cantidadDePaginas <= 0){
+            throw new IllegalArgumentException("La cantidad de paginas es invalida");
+        }
+                
+        this.titulo = Objects.requireNonNull(titulo, "El titulo es obligatorio");
+        this.autor = Objects.requireNonNull(autor, "El autor es obligatorio");
+        this.categoria = Objects.requireNonNull(categoria, "La categoria es obligatoria");
+        this.fechaDePublicacion = Objects.requireNonNull(fechaDePublicacion, "La fecha de publicacion es obligatoria");
+        this.cantidadDePaginas = Objects.requireNonNull(cantidadDePaginas, "La cantidad de paginas es obligatoria");
+        this.idioma = Objects.requireNonNull(idioma, "El idioma es obligatorio");
 
         this.estado = Estado.DISPONIBLE;
         this.id = siguienteId++;
     }
 
-    public void cambiarEstado(Estado estado){
-        this.estado = estado;
+    public void habilitar(){
+        if(estado == Estado.INHABILITADO){
+            throw new LibroInhabilitadoException("El libro se encuentra inhabilitado");
+        }
+
+        estado = Estado.DISPONIBLE;
+    }
+
+    public void prestar(){
+        this.estado = Estado.PRESTADO;
+    }
+
+    public void reparar(){
+        this.estado = Estado.EN_REPARACION;
+    }
+
+    public void inhabilitar(){
+        this.estado = Estado.INHABILITADO;
     }
 
     public Estado getEstado(){
@@ -81,5 +105,29 @@ public class Libro {
     public Integer getId(){
         return id;
     }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public LocalDate getFechaDePublicacion() {
+        return fechaDePublicacion;
+    }
+
+    public Integer getCantidadDePaginas() {
+        return cantidadDePaginas;
+    }
+
+    public Idioma getIdioma() {
+        return idioma;
+    } 
 
 }
