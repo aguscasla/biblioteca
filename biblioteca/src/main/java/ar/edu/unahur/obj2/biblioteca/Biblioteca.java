@@ -28,7 +28,7 @@ public class Biblioteca {
     private ArrayList<Libro> catalogo = new ArrayList<>();
     private Map<String, Usuario> socios = new HashMap<>();
     private ArrayList<Prestamo> prestamos = new ArrayList<>();
-    private final Clock reloj;
+    private Clock reloj;
 
     public Biblioteca(Clock reloj) {
         this.reloj = reloj;
@@ -235,6 +235,8 @@ public class Biblioteca {
         return prestamos;
     }
 
-    
+    public void setReloj(Clock reloj){
+        this.reloj = reloj;
+    }
 
 }

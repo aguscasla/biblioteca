@@ -5,15 +5,15 @@ biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioSinPrestamosDisponiblesException
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioNoRegistradoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioYaRegistradoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,LibroInexistenteException,0,4,0,0,0,2,0,1,0,1
-biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoNoRenovableException,4,0,0,0,2,0,1,0,1,0
+biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoNoRenovableException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioInactivoException,0,4,0,0,0,2,0,1,0,1
-biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoVencidoException,4,0,0,0,2,0,1,0,1,0
+biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoVencidoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,LibroNoDisponibleException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioInhabilitadoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioNoAsociableException,4,0,0,0,2,0,1,0,1,0
-biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoFinalizadoException,4,0,0,0,2,0,1,0,1,0
+biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoFinalizadoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioNoReasociableException,0,4,0,0,0,2,0,1,0,1
-biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoSinRenovacionesDisponiblesException,4,0,0,0,2,0,1,0,1,0
+biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoSinRenovacionesDisponiblesException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.libros,Libro,3,50,0,0,1,15,1,4,1,4
 biblioteca,ar.edu.unahur.obj2.libros,Libro.Estado,0,27,0,0,0,5,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.libros,Libro.Idioma,0,33,0,0,0,6,0,1,0,1
@@ -21,4 +21,4 @@ biblioteca,ar.edu.unahur.obj2.libros,Libro.Categoria,0,147,0,0,0,25,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo.Estado,0,15,0,0,0,3,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo,0,69,0,0,0,24,0,12,0,12
 biblioteca,ar.edu.unahur.obj2,Main,7,0,0,0,3,0,2,0,2,0
-biblioteca,ar.edu.unahur.obj2.biblioteca,Biblioteca,27,425,6,50,6,95,8,47,2,25
+biblioteca,ar.edu.unahur.obj2.biblioteca,Biblioteca,7,449,2,54,2,101,4,52,2,26

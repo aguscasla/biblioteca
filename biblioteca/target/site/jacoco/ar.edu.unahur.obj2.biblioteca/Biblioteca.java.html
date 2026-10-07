@@ -28,7 +28,7 @@ public class Biblioteca {
 <span class="fc" id="L28">    private ArrayList&lt;Libro&gt; catalogo = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L29">    private Map&lt;String, Usuario&gt; socios = new HashMap&lt;&gt;();</span>
 <span class="fc" id="L30">    private ArrayList&lt;Prestamo&gt; prestamos = new ArrayList&lt;&gt;();</span>
-    private final Clock reloj;
+    private Clock reloj;
 
 <span class="fc" id="L33">    public Biblioteca(Clock reloj) {</span>
 <span class="fc" id="L34">        this.reloj = reloj;</span>
@@ -149,20 +149,20 @@ public class Biblioteca {
     public void renovarPrestamo(Prestamo prestamo){
 <span class="fc" id="L150">        LocalDate hoy = LocalDate.now(reloj);</span>
 
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if(prestamo.getEstado() != Prestamo.Estado.EN_CURSO){</span>
-<span class="nc" id="L153">            throw new PrestamoFinalizadoException(&quot;El prestamo debe estar en curso.&quot;);</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if(prestamo.getEstado() != Prestamo.Estado.EN_CURSO){</span>
+<span class="fc" id="L153">            throw new PrestamoFinalizadoException(&quot;El prestamo debe estar en curso.&quot;);</span>
         }
 
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if(prestamo.estaVencido(hoy)){</span>
-<span class="nc" id="L157">            throw new PrestamoVencidoException(&quot;El prestamo se encuentra vencido.&quot;);</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if(prestamo.estaVencido(hoy)){</span>
+<span class="fc" id="L157">            throw new PrestamoVencidoException(&quot;El prestamo se encuentra vencido.&quot;);</span>
         }
 
-<span class="pc bpc" id="L160" title="2 of 4 branches missed.">        if(!(!hoy.isBefore(prestamo.getFechaLimite().minusDays(2)) &amp;&amp; !hoy.isAfter(prestamo.getFechaLimite()))){</span>
-<span class="nc" id="L161">            throw new PrestamoNoRenovableException(&quot;El prestamo no puede ser renovado fuera de fecha.&quot;);</span>
+<span class="pc bpc" id="L160" title="1 of 4 branches missed.">        if(!(!hoy.isBefore(prestamo.getFechaLimite().minusDays(2)) &amp;&amp; !hoy.isAfter(prestamo.getFechaLimite()))){</span>
+<span class="fc" id="L161">            throw new PrestamoNoRenovableException(&quot;El prestamo no puede ser renovado fuera de fecha.&quot;);</span>
         }
 
-<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if(prestamo.getCantidadDeRenovaciones() == 0){</span>
-<span class="nc" id="L165">            throw new PrestamoSinRenovacionesDisponiblesException(&quot;El prestamo no cuenta con renovaciones disponibles.&quot;);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if(prestamo.getCantidadDeRenovaciones() == 0){</span>
+<span class="fc" id="L165">            throw new PrestamoSinRenovacionesDisponiblesException(&quot;El prestamo no cuenta con renovaciones disponibles.&quot;);</span>
         }
         
 <span class="fc" id="L168">        prestamo.setFechaLimite(prestamo.getFechaLimite().plusDays(7));</span>
@@ -235,7 +235,9 @@ public class Biblioteca {
 <span class="nc" id="L235">        return prestamos;</span>
     }
 
-    
+    public void setReloj(Clock reloj){
+<span class="fc" id="L239">        this.reloj = reloj;</span>
+<span class="fc" id="L240">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

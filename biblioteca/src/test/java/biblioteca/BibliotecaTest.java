@@ -19,6 +19,10 @@ import org.junit.jupiter.api.Test;
 import ar.edu.unahur.obj2.biblioteca.Biblioteca;
 import ar.edu.unahur.obj2.exceptions.LibroInexistenteException;
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
+import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
+import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
+import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException;
+import ar.edu.unahur.obj2.exceptions.PrestamoVencidoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioInactivoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioInhabilitadoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioNoReasociableException;
@@ -317,8 +321,6 @@ public class BibliotecaTest {
         biblioteca.asociarUsuario(usuario, 2);
         biblioteca.asociarUsuario(usuario2, 2);
 
-        Map<String, Usuario> usuariosAComparar = Map.of("46787883", usuario, "12566044", usuario2);
-
         Prestamo prestamo = biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 1), 
         LocalDate.of(2026, 9, 25), 0);
 
@@ -346,8 +348,6 @@ public class BibliotecaTest {
         biblioteca.asociarUsuario(usuario, 2);
         biblioteca.asociarUsuario(usuario2, 2);
 
-        Map<String, Usuario> usuariosAComparar = Map.of("12566044", usuario2);
-
         biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 20), 0);
 
@@ -359,5 +359,53 @@ public class BibliotecaTest {
         biblioteca.evaluarUsuarios();
 
         assertEquals(Usuario.Estado.INHABILITADO, biblioteca.obtenerUsuario("46787883").getEstado());
+    }
+
+    @Test 
+    void noDeberiaRenovarUnPrestamo_SiNoSeEncuentraEnCurso(){
+        biblioteca.asociarUsuario(usuario, 2);
+
+        Prestamo prestamo = biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 15),
+            LocalDate.of(2026, 10, 5), 2);
+
+        biblioteca.finalizarPrestamo(prestamo);
+
+        assertThrows(PrestamoFinalizadoException.class, () -> biblioteca.renovarPrestamo(prestamo));
+    }
+
+    @Test 
+    void noDeberiaRenovarUnPrestamo_SiEsteSeEncuentraVencido(){
+        biblioteca.asociarUsuario(usuario, 2);
+
+        Prestamo prestamo = biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 15),
+            LocalDate.of(2026, 9, 28), 2);
+
+        assertThrows(PrestamoVencidoException.class, () -> biblioteca.renovarPrestamo(prestamo));
+    }
+
+    @Test 
+    void noDeberiaRenovarUnPrestamo_SiLaFechaActualEstaAMasDeDosDiasDeLaFechaLimite(){
+        biblioteca.asociarUsuario(usuario, 2);
+
+        Prestamo prestamo = biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 15),
+            LocalDate.of(2026, 10, 3), 2);
+
+        assertThrows(PrestamoNoRenovableException.class, () -> biblioteca.renovarPrestamo(prestamo));
+    }
+
+    @Test 
+    void noDeberiaRenovarUnPrestamo_SiAlcanzoLaCantidadDeRenovacionesDisponibles(){
+        biblioteca.asociarUsuario(usuario, 2);
+
+        Prestamo prestamo = biblioteca.otorgarPrestamo(1, usuario, libro, LocalDate.of(2026, 9, 15),
+            LocalDate.of(2026, 9, 30), 1);
+
+        biblioteca.renovarPrestamo(prestamo);
+
+        fechaFija = LocalDateTime.of(2026, 10, 5, 12, 0, 0);
+        ZonedDateTime fechaZonificada = fechaFija.atZone(zonaHoraria);
+        biblioteca.setReloj(Clock.fixed(fechaZonificada.toInstant(), zonaHoraria));
+
+        assertThrows(PrestamoSinRenovacionesDisponiblesException.class, () -> biblioteca.renovarPrestamo(prestamo));
     }
 }
