@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unahur.obj2.exceptions.LibroInhabilitadoException;
+import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 import ar.edu.unahur.obj2.libros.Libro;
 
 public class LibroTest {
@@ -57,6 +58,33 @@ public class LibroTest {
         libro.inhabilitar();
 
         Executable act = () -> libro.habilitar();
+
+        assertThrows(LibroInhabilitadoException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSePrestaUnLibroNoDisponible(){
+        libro.prestar();
+        
+        Executable act = () -> libro.prestar();
+
+        assertThrows(LibroNoDisponibleException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeReparaUnLibroNoDisponible(){
+        libro.prestar();
+
+        Executable act = () -> libro.reparar();
+
+        assertThrows(LibroNoDisponibleException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInhabilitaUnLibroInhabilitado(){
+        libro.inhabilitar();
+
+        Executable act = () -> libro.inhabilitar();
 
         assertThrows(LibroInhabilitadoException.class, act);
     }
