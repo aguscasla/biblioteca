@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import ar.edu.unahur.obj2.exceptions.LibroInhabilitadoException;
+import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 
 public class Libro {
 
@@ -62,10 +63,6 @@ public class Libro {
 
     public Libro(String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
             Integer cantidadDePaginas, Idioma idioma) {
-
-        if(cantidadDePaginas <= 0){
-            throw new IllegalArgumentException("La cantidad de paginas es invalida");
-        }
                 
         this.titulo = Objects.requireNonNull(titulo, "El titulo es obligatorio");
         this.autor = Objects.requireNonNull(autor, "El autor es obligatorio");
@@ -73,6 +70,10 @@ public class Libro {
         this.fechaDePublicacion = Objects.requireNonNull(fechaDePublicacion, "La fecha de publicacion es obligatoria");
         this.cantidadDePaginas = Objects.requireNonNull(cantidadDePaginas, "La cantidad de paginas es obligatoria");
         this.idioma = Objects.requireNonNull(idioma, "El idioma es obligatorio");
+
+        if(cantidadDePaginas <= 0){
+            throw new IllegalArgumentException("La cantidad de paginas es invalida");
+        }
 
         this.estado = Estado.DISPONIBLE;
         this.id = siguienteId++;
@@ -83,18 +84,33 @@ public class Libro {
             throw new LibroInhabilitadoException("El libro se encuentra inhabilitado");
         }
 
-        estado = Estado.DISPONIBLE;
+        if(estado != Estado.DISPONIBLE){
+            estado = Estado.DISPONIBLE;
+        }
+        
     }
 
     public void prestar(){
+        if(estado != Estado.DISPONIBLE){
+            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
+        }
+
         this.estado = Estado.PRESTADO;
     }
 
     public void reparar(){
+        if(estado != Estado.DISPONIBLE){
+            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
+        }
+
         this.estado = Estado.EN_REPARACION;
     }
 
     public void inhabilitar(){
+        if(estado == Estado.INHABILITADO){
+            throw new LibroInhabilitadoException("El libro se encuentra inhabilitado");
+        }
+
         this.estado = Estado.INHABILITADO;
     }
 
