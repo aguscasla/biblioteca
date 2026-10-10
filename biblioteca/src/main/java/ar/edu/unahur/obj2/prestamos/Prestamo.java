@@ -43,6 +43,11 @@ public class Prestamo {
         if(fechaDeInicio == fechaLimite || fechaDeInicio.isAfter(fechaLimite)){
             throw new FechaInvalidaException("La fecha no es valida");
         }
+
+        if(id <= 0){
+            throw new IllegalArgumentException("El id es invalido");
+        }
+
     }
 
     public Boolean estaVencido(LocalDate fechaActual){
