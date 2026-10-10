@@ -1,7 +1,11 @@
 package ar.edu.unahur.obj2.prestamos;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
+import ar.edu.unahur.obj2.exceptions.FechaInvalidaException;
+import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
+import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException;
 import ar.edu.unahur.obj2.libros.Libro;
 import ar.edu.unahur.obj2.usuarios.Usuario;
 
@@ -23,13 +27,22 @@ public class Prestamo {
 
     public Prestamo(Integer id, Usuario socio, Libro ejemplar, LocalDate fechaDeInicio, LocalDate fechaLimite,
             Integer cantidadDeRenovaciones) {
-        this.id = id;
-        this.socio = socio;
-        this.ejemplar = ejemplar;
-        this.fechaDeInicio = fechaDeInicio;
-        this.fechaLimite = fechaLimite;
-        this.cantidadDeRenovaciones = cantidadDeRenovaciones;
+
+        this.id = Objects.requireNonNull(id, "El id es obligatorio");
+        this.socio = Objects.requireNonNull(socio, "El socio es obligatorio");
+        this.ejemplar = Objects.requireNonNull(ejemplar, "El ejemplar es obligatorio");
+        this.fechaDeInicio = Objects.requireNonNull(fechaDeInicio, "La fecha de inicio es obligatoria");
+        this.fechaLimite = Objects.requireNonNull(fechaLimite, "La fecha de inicio es obligatoria");
+        this.cantidadDeRenovaciones = Objects.requireNonNull(cantidadDeRenovaciones, "La cantidad de renovaciones es obligatoria");
         this.estado = Estado.EN_CURSO;
+
+        if(cantidadDeRenovaciones < 0){
+            throw new IllegalArgumentException("La cantidad de renovaciones es invalida");
+        }
+
+        if(fechaDeInicio == fechaLimite || fechaDeInicio.isAfter(fechaLimite)){
+            throw new FechaInvalidaException("La fecha no es valida");
+        }
     }
 
     public Boolean estaVencido(LocalDate fechaActual){
@@ -37,7 +50,19 @@ public class Prestamo {
     }
 
     public void descontarRenovacion() {
+        if(cantidadDeRenovaciones == 0){
+            throw new PrestamoSinRenovacionesDisponiblesException("El prestamo no cuenta con renovaciones disponibles");
+        }
+
         this.cantidadDeRenovaciones -= 1;
+    }
+
+    public void finalizarPrestamo(){
+        if(estado == Estado.FINALIZADO){
+            throw new PrestamoFinalizadoException("El prestamo se encuentra finalizado");
+        }
+        
+        estado = Estado.FINALIZADO;
     }
 
     public Estado getEstado(){
@@ -64,16 +89,12 @@ public class Prestamo {
         return ejemplar;
     }
 
-    public void setFechaLimite(LocalDate fechaLimite) {
-        this.fechaLimite = fechaLimite;
+    public Integer getId() {
+        return id;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
-
-    public void setFechaDeDevolucion(LocalDate fechaDeDevolucion) {
-        this.fechaDeDevolucion = fechaDeDevolucion;
+    public LocalDate getFechaDeInicio() {
+        return fechaDeInicio;
     }
     
 }
