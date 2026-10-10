@@ -2,41 +2,39 @@ package prestamos;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.Clock;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
-import ar.edu.unahur.obj2.biblioteca.Biblioteca;
+import ar.edu.unahur.obj2.exceptions.FechaInvalidaException;
 import ar.edu.unahur.obj2.libros.Libro;
 import ar.edu.unahur.obj2.prestamos.Prestamo;
+import ar.edu.unahur.obj2.usuarios.Usuario;
 
 public class PrestamoTest {
     
     private Prestamo prestamo;
-    private Biblioteca biblioteca;
     private Libro ejemplar;
-
-    LocalDateTime fechaFija = LocalDateTime.of(2026, 9, 29, 12, 0, 0);
-    ZoneId zonaHoraria = ZoneId.systemDefault();
-    ZonedDateTime fechaZonificada = fechaFija.atZone(zonaHoraria);
+    private Usuario socio;
 
     @BeforeEach 
     void setUp(){
-        ejemplar = new Libro(null, null, null, 
-            null, null, null);
+        ejemplar = new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, 
+            LocalDate.of(2014, 1, 1), 340, 
+            Libro.Idioma.CASTELLANO);
 
-        prestamo = new Prestamo(101, null, 
+        socio = new Usuario("Agustina", "Aguero", "4787883", 20, 
+            "3755578920", "agus@gmail.com");
+
+        prestamo = new Prestamo(101, socio, 
             ejemplar, LocalDate.of(2026, 8, 10), LocalDate.of(2026, 8, 25), 
             5);
 
-        biblioteca = new Biblioteca(Clock.fixed(fechaZonificada.toInstant(), zonaHoraria));
     }
 
     @Test
@@ -51,16 +49,97 @@ public class PrestamoTest {
 
     @Test 
     void noDeberiaEstarVencido_SiAunNoHaPasadoLaFechaLimite(){
-        prestamo.setFechaLimite(LocalDate.of(2026, 10, 1));
+        Prestamo prestamo = new Prestamo(2, socio, ejemplar, LocalDate.of(2026, 9, 20), 
+            LocalDate.of(2026, 10, 1), 2);
 
         assertFalse(prestamo.estaVencido(LocalDate.of(2026, 9, 29)));
     }
 
     @Test 
-    void deberiaEstarFinalizado_SiSeDevuelve(){
-        biblioteca.finalizarPrestamo(prestamo);
+    void deberiaEstarFinalizado_SiSeFinalizaElPrestamo(){
+        prestamo.finalizarPrestamo();
 
         assertEquals(Prestamo.Estado.FINALIZADO, prestamo.getEstado());
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnIdNulo(){
+        Executable act = () -> new Prestamo(null, socio, ejemplar, LocalDate.of(2026, 9, 20), 
+            LocalDate.of(2026, 10, 1), 2);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnIdInvalido(){
+        Executable act = () -> new Prestamo(0, socio, ejemplar, LocalDate.of(2026, 9, 20), 
+            LocalDate.of(2026, 10, 1), 2);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnSocioNulo(){
+        Executable act = () -> new Prestamo(2, null, ejemplar, LocalDate.of(2026, 9, 20), 
+            LocalDate.of(2026, 10, 1), 2);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnEjemplarNulo(){
+        Executable act = () -> new Prestamo(2, socio, null, LocalDate.of(2026, 9, 20), 
+            LocalDate.of(2026, 10, 1), 2);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaFechaDeInicioNula(){
+        Executable act = () -> new Prestamo(2, socio, ejemplar, null, 
+            LocalDate.of(2026, 10, 1), 2);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaFechaDeInicioIgualALaFechaLimite(){
+        Executable act = () -> new Prestamo(2, socio, ejemplar, LocalDate.of(2026, 10, 1), 
+            LocalDate.of(2026, 10, 1), 2);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaFechaDeInicioPosteriorALaFechaLimite(){
+        Executable act = () -> new Prestamo(2, socio, ejemplar, LocalDate.of(2026, 10, 20), 
+            LocalDate.of(2026, 10, 1), 2);
+
+        assertThrows(FechaInvalidaException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaFechaLimiteNula(){
+        Executable act = () -> new Prestamo(2, socio, ejemplar, LocalDate.of(2026, 9, 20), 
+            null, 2);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaCantidadDeRenovacionesNula(){
+        Executable act = () -> new Prestamo(2, socio, ejemplar, LocalDate.of(2026, 9, 20), 
+            LocalDate.of(2026, 10, 1), null);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaCantidadDeRenovacionesInvalida(){
+        Executable act = () -> new Prestamo(2, socio, ejemplar, LocalDate.of(2026, 9, 20), 
+            LocalDate.of(2026, 10, 1), -1);
+
+        assertThrows(IllegalArgumentException.class, act);
     }
 
 }
