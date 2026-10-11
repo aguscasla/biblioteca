@@ -78,7 +78,7 @@ public class Biblioteca {
             throw new UsuarioInhabilitadoException("El usuario ya se encuentra inhabilitado.");
         }
 
-        usuario.inhabilitar();;
+        usuario.inhabilitar();
     }
 
     public Usuario obtenerUsuario(String dniDelUsuario){
@@ -149,8 +149,8 @@ public class Biblioteca {
             throw new PrestamoNoRenovableException("El prestamo no puede ser renovado fuera de fecha.");
         }
         
-        prestamo.extenderFechaLimite(7);
         prestamo.descontarRenovacion();
+        prestamo.extenderFechaLimite(7);
 
     }
 
@@ -159,8 +159,8 @@ public class Biblioteca {
         Libro ejemplarDevuelto = prestamo.getEjemplar();
 
         prestamo.finalizarPrestamo();
-        prestamo.establecerFechaDeDevolucion(hoy);;
-        ejemplarDevuelto.habilitar();;
+        prestamo.establecerFechaDeDevolucion(hoy);
+        ejemplarDevuelto.habilitar();
 
     }
 
@@ -203,7 +203,7 @@ public class Biblioteca {
 
         Prestamo prestamo = new Prestamo(idDelPrestamo, socio, ejemplar, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);
 
-        ejemplar.prestar();;
+        ejemplar.prestar();
         prestamos.add(prestamo);
 
         return prestamo;

@@ -32,7 +32,7 @@ public class Prestamo {
         this.socio = Objects.requireNonNull(socio, "El socio es obligatorio");
         this.ejemplar = Objects.requireNonNull(ejemplar, "El ejemplar es obligatorio");
         this.fechaDeInicio = Objects.requireNonNull(fechaDeInicio, "La fecha de inicio es obligatoria");
-        this.fechaLimite = Objects.requireNonNull(fechaLimite, "La fecha de inicio es obligatoria");
+        this.fechaLimite = Objects.requireNonNull(fechaLimite, "La fecha limite es obligatoria");
         this.cantidadDeRenovaciones = Objects.requireNonNull(cantidadDeRenovaciones, "La cantidad de renovaciones es obligatoria");
         this.estado = Estado.EN_CURSO;
 
@@ -71,7 +71,7 @@ public class Prestamo {
     }
 
     public void extenderFechaLimite(Integer cantidad){
-        fechaLimite.plusDays(cantidad);
+        this.fechaLimite = fechaLimite.plusDays(cantidad);
     }
 
     public void establecerFechaDeDevolucion(LocalDate fechaDeDevolucion){
