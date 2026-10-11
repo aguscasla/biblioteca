@@ -75,7 +75,7 @@ public class PrestamoTest {
         Executable act = () -> new Prestamo(0, socio, ejemplar, LocalDate.of(2026, 9, 20), 
             LocalDate.of(2026, 10, 1), 2);
 
-        assertThrows(NullPointerException.class, act);
+        assertThrows(IllegalArgumentException.class, act);
     }
 
     @Test 
@@ -107,7 +107,7 @@ public class PrestamoTest {
         Executable act = () -> new Prestamo(2, socio, ejemplar, LocalDate.of(2026, 10, 1), 
             LocalDate.of(2026, 10, 1), 2);
 
-        assertThrows(NullPointerException.class, act);
+        assertThrows(FechaInvalidaException.class, act);
     }
 
     @Test 

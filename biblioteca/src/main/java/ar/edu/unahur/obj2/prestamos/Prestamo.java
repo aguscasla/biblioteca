@@ -40,7 +40,7 @@ public class Prestamo {
             throw new IllegalArgumentException("La cantidad de renovaciones es invalida");
         }
 
-        if(fechaDeInicio == fechaLimite || fechaDeInicio.isAfter(fechaLimite)){
+        if(fechaDeInicio.isEqual(fechaLimite) || fechaDeInicio.isAfter(fechaLimite)){
             throw new FechaInvalidaException("La fecha no es valida");
         }
 
