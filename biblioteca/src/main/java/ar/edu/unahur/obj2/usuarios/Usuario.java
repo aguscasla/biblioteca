@@ -32,6 +32,14 @@ public class Usuario {
         this.estado = Estado.NO_REGISTRADO;
     }
 
+    public void establecerLimiteDePrestamos(Integer limiteDePrestamos){
+        if(limiteDePrestamos <= 0){
+            throw new IllegalArgumentException("El limite de prestamos es invalido");
+        }
+
+        this.limiteDePrestamos = limiteDePrestamos;
+    }
+
     public String getNombre() {
         return nombre;
     }

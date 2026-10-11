@@ -11,7 +11,6 @@ import ar.edu.unahur.obj2.exceptions.LibroInexistenteException;
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
-import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException;
 import ar.edu.unahur.obj2.exceptions.PrestamoVencidoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioInactivoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioInhabilitadoException;
@@ -43,54 +42,43 @@ public class Biblioteca {
         if (socios.containsKey(usuario.getDni())) {
             throw new UsuarioYaRegistradoException("El usuario ya se encuentra registrado.");
         }
-
-        usuario.setEstado(Usuario.Estado.ACTIVO);
-        usuario.setLimiteDePrestamos(limiteDePrestamos);
+        
+        usuario.establecerLimiteDePrestamos(limiteDePrestamos);
+        usuario.darDeAlta();
+        
         socios.put(usuario.getDni(), usuario);
 
     }
 
     public void reasociarUsuario(String dniUsuario){
-        Usuario usuario = socios.get(dniUsuario);
-
-        if(usuario == null){
-            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado.");
-        }
+        Usuario usuario = obtenerUsuario(dniUsuario);
 
         if(usuario.getEstado() != Usuario.Estado.BAJA_VOLUNTARIA){
             throw new UsuarioNoReasociableException("Solamente se permite reasociar a los usuarios con baja voluntaria");
         }
 
-        usuario.setEstado(Usuario.Estado.ACTIVO);
+        usuario.darDeAlta();
 
     }
 
     public void desasociarUsuario(String dniUsuario){
-        Usuario usuario = socios.get(dniUsuario);
-
-        if(usuario == null){
-            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado.");
-        }
+        Usuario usuario = obtenerUsuario(dniUsuario);
 
         if(usuario.getEstado() != Usuario.Estado.ACTIVO){
             throw new UsuarioInactivoException("El usuario no se encuentra activo.");
         }
 
-        usuario.setEstado(Usuario.Estado.BAJA_VOLUNTARIA);
+        usuario.darBajaVoluntaria();
     }
 
     public void inhabilitarUsuario(String dniUsuario){
-        Usuario usuario = socios.get(dniUsuario);
-
-        if(usuario == null){
-            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado.");
-        }
+        Usuario usuario = obtenerUsuario(dniUsuario);
 
         if(usuario.getEstado() == Usuario.Estado.INHABILITADO){
             throw new UsuarioInhabilitadoException("El usuario ya se encuentra inhabilitado.");
         }
 
-        usuario.setEstado(Usuario.Estado.INHABILITADO);
+        usuario.inhabilitar();;
     }
 
     public Usuario obtenerUsuario(String dniDelUsuario){
@@ -149,7 +137,7 @@ public class Biblioteca {
     public void renovarPrestamo(Prestamo prestamo){
         LocalDate hoy = LocalDate.now(reloj);
 
-        if(prestamo.getEstado() != Prestamo.Estado.EN_CURSO){
+        if(prestamo.getEstado() == Prestamo.Estado.FINALIZADO){
             throw new PrestamoFinalizadoException("El prestamo debe estar en curso.");
         }
 
@@ -160,12 +148,8 @@ public class Biblioteca {
         if(!(!hoy.isBefore(prestamo.getFechaLimite().minusDays(2)) && !hoy.isAfter(prestamo.getFechaLimite()))){
             throw new PrestamoNoRenovableException("El prestamo no puede ser renovado fuera de fecha.");
         }
-
-        if(prestamo.getCantidadDeRenovaciones() == 0){
-            throw new PrestamoSinRenovacionesDisponiblesException("El prestamo no cuenta con renovaciones disponibles.");
-        }
         
-        prestamo.setFechaLimite(prestamo.getFechaLimite().plusDays(7));
+        prestamo.extenderFechaLimite(7);
         prestamo.descontarRenovacion();
 
     }
@@ -174,17 +158,16 @@ public class Biblioteca {
         LocalDate hoy = LocalDate.now(reloj);
         Libro ejemplarDevuelto = prestamo.getEjemplar();
 
-        prestamo.setEstado(Prestamo.Estado.FINALIZADO);
-        prestamo.setFechaDeDevolucion(hoy);
-        ejemplarDevuelto.cambiarEstado(Libro.Estado.DISPONIBLE);
+        prestamo.finalizarPrestamo();
+        prestamo.establecerFechaDeDevolucion(hoy);;
+        ejemplarDevuelto.habilitar();;
 
     }
 
-    public void validarPrestamo(Prestamo prestamo, Usuario socio){
-        ArrayList<Prestamo> prestamos = obtenerPrestamosDelUsuario(socio);
-
+    public void validarPrestamo(Usuario socio, Libro ejemplar){
+        
         if(estaInfringiendoLasNormas(socio)){
-            throw new UsuarioInhabilitadoException("El usuario no se encuentra habilitado para solicitar un prestamo.");
+            throw new UsuarioInhabilitadoException("El usuario no se encuentra habilitado para solicitar un prestamo");
         }
 
         if(socio.getEstado() != Usuario.Estado.ACTIVO){
@@ -192,15 +175,15 @@ public class Biblioteca {
         }
 
         if(socio.getLimiteDePrestamos() == prestamosEnCursoDelUsuario(socio).size()) {
-            throw new UsuarioSinPrestamosDisponiblesException("El usuario alcanzo el limite de prestamos.");
+            throw new UsuarioSinPrestamosDisponiblesException("El usuario alcanzo el limite de prestamos");
         }
 
-        if(prestamo.getEjemplar() == null){
-            throw new LibroInexistenteException("El libro no existe.");
+        if(ejemplar == null){
+            throw new LibroInexistenteException("El libro no existe");
         }
 
-        if(prestamo.getEjemplar().getEstado() != Libro.Estado.DISPONIBLE){
-            throw new LibroNoDisponibleException("El libro no se encuentra disponible.");
+        if(ejemplar.getEstado() != Libro.Estado.DISPONIBLE){
+            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
         }
 
     }
@@ -211,13 +194,16 @@ public class Biblioteca {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Prestamo otorgarPrestamo(Integer idDelPrestamo, Usuario socio, Libro ejemplar, LocalDate fechaDeInicio,
+    public Prestamo otorgarPrestamo(Integer idDelPrestamo, String dniDelUsuario, Libro ejemplar, LocalDate fechaDeInicio,
                                         LocalDate fechaDeLimite, Integer cantidadDeRenovaciones){
+
+        Usuario socio = obtenerUsuario(dniDelUsuario);
+
+        validarPrestamo(socio, ejemplar);
 
         Prestamo prestamo = new Prestamo(idDelPrestamo, socio, ejemplar, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);
 
-        validarPrestamo(prestamo, socio);
-        ejemplar.cambiarEstado(Libro.Estado.PRESTADO);
+        ejemplar.prestar();;
         prestamos.add(prestamo);
 
         return prestamo;
@@ -233,10 +219,6 @@ public class Biblioteca {
 
     public ArrayList<Prestamo> getPrestamos() {
         return prestamos;
-    }
-
-    public void setReloj(Clock reloj){
-        this.reloj = reloj;
     }
 
 }

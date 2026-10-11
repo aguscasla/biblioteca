@@ -70,6 +70,14 @@ public class Prestamo {
         estado = Estado.FINALIZADO;
     }
 
+    public void extenderFechaLimite(Integer cantidad){
+        fechaLimite.plusDays(cantidad);
+    }
+
+    public void establecerFechaDeDevolucion(LocalDate fechaDeDevolucion){
+        this.fechaDeDevolucion = fechaDeDevolucion;
+    }
+
     public Estado getEstado(){
         return estado;
     }
