@@ -1,5 +1,7 @@
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\biblioteca\Biblioteca.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\FechaInvalidaException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\LibroInexistenteException.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\LibroInhabilitadoException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\LibroNoDisponibleException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\PrestamoFinalizadoException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\PrestamoNoRenovableException.java
@@ -13,6 +15,5 @@ c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\mai
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\UsuarioSinPrestamosDisponiblesException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\UsuarioYaRegistradoException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\libros\Libro.java
-c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\Main.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\prestamos\Prestamo.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\usuarios\Usuario.java

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Prestamo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">biblioteca</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unahur.obj2.prestamos</a> &gt; <span class="el_source">Prestamo.java</span></div><h1>Prestamo.java</h1><pre class="source lang-java linenums">package ar.edu.unahur.obj2.prestamos;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
+import ar.edu.unahur.obj2.exceptions.FechaInvalidaException;
+import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
+import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException;
 import ar.edu.unahur.obj2.libros.Libro;
 import ar.edu.unahur.obj2.usuarios.Usuario;
 
@@ -16,65 +20,95 @@ public class Prestamo {
     private Integer cantidadDeRenovaciones;
     private Estado estado;
 
-<span class="fc" id="L19">    public enum Estado {</span>
-<span class="fc" id="L20">        FINALIZADO,</span>
-<span class="fc" id="L21">        EN_CURSO</span>
+<span class="fc" id="L23">    public enum Estado {</span>
+<span class="fc" id="L24">        FINALIZADO,</span>
+<span class="fc" id="L25">        EN_CURSO</span>
     }
 
     public Prestamo(Integer id, Usuario socio, Libro ejemplar, LocalDate fechaDeInicio, LocalDate fechaLimite,
-<span class="fc" id="L25">            Integer cantidadDeRenovaciones) {</span>
-<span class="fc" id="L26">        this.id = id;</span>
-<span class="fc" id="L27">        this.socio = socio;</span>
-<span class="fc" id="L28">        this.ejemplar = ejemplar;</span>
-<span class="fc" id="L29">        this.fechaDeInicio = fechaDeInicio;</span>
-<span class="fc" id="L30">        this.fechaLimite = fechaLimite;</span>
-<span class="fc" id="L31">        this.cantidadDeRenovaciones = cantidadDeRenovaciones;</span>
-<span class="fc" id="L32">        this.estado = Estado.EN_CURSO;</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L29">            Integer cantidadDeRenovaciones) {</span>
+
+<span class="fc" id="L31">        this.id = Objects.requireNonNull(id, &quot;El id es obligatorio&quot;);</span>
+<span class="fc" id="L32">        this.socio = Objects.requireNonNull(socio, &quot;El socio es obligatorio&quot;);</span>
+<span class="fc" id="L33">        this.ejemplar = Objects.requireNonNull(ejemplar, &quot;El ejemplar es obligatorio&quot;);</span>
+<span class="fc" id="L34">        this.fechaDeInicio = Objects.requireNonNull(fechaDeInicio, &quot;La fecha de inicio es obligatoria&quot;);</span>
+<span class="fc" id="L35">        this.fechaLimite = Objects.requireNonNull(fechaLimite, &quot;La fecha limite es obligatoria&quot;);</span>
+<span class="fc" id="L36">        this.cantidadDeRenovaciones = Objects.requireNonNull(cantidadDeRenovaciones, &quot;La cantidad de renovaciones es obligatoria&quot;);</span>
+<span class="fc" id="L37">        this.estado = Estado.EN_CURSO;</span>
+
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if(cantidadDeRenovaciones &lt; 0){</span>
+<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;La cantidad de renovaciones es invalida&quot;);</span>
+        }
+
+<span class="fc bfc" id="L43" title="All 4 branches covered.">        if(fechaDeInicio.isEqual(fechaLimite) || fechaDeInicio.isAfter(fechaLimite)){</span>
+<span class="fc" id="L44">            throw new FechaInvalidaException(&quot;La fecha no es valida&quot;);</span>
+        }
+
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if(id &lt;= 0){</span>
+<span class="fc" id="L48">            throw new IllegalArgumentException(&quot;El id es invalido&quot;);</span>
+        }
+
+<span class="fc" id="L51">    }</span>
 
     public Boolean estaVencido(LocalDate fechaActual){
-<span class="fc" id="L36">        return fechaActual.isAfter(fechaLimite);</span>
+<span class="fc" id="L54">        return fechaActual.isAfter(fechaLimite);</span>
     }
 
     public void descontarRenovacion() {
-<span class="fc" id="L40">        this.cantidadDeRenovaciones -= 1;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if(cantidadDeRenovaciones == 0){</span>
+<span class="fc" id="L59">            throw new PrestamoSinRenovacionesDisponiblesException(&quot;El prestamo no cuenta con renovaciones disponibles&quot;);</span>
+        }
+
+<span class="fc" id="L62">        this.cantidadDeRenovaciones -= 1;</span>
+<span class="fc" id="L63">    }</span>
+
+    public void finalizarPrestamo(){
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if(estado == Estado.FINALIZADO){</span>
+<span class="nc" id="L67">            throw new PrestamoFinalizadoException(&quot;El prestamo se encuentra finalizado&quot;);</span>
+        }
+        
+<span class="fc" id="L70">        estado = Estado.FINALIZADO;</span>
+<span class="fc" id="L71">    }</span>
+
+    public void extenderFechaLimite(Integer cantidad){
+<span class="fc" id="L74">        this.fechaLimite = fechaLimite.plusDays(cantidad);</span>
+<span class="fc" id="L75">    }</span>
+
+    public void establecerFechaDeDevolucion(LocalDate fechaDeDevolucion){
+<span class="fc" id="L78">        this.fechaDeDevolucion = fechaDeDevolucion;</span>
+<span class="fc" id="L79">    }</span>
 
     public Estado getEstado(){
-<span class="fc" id="L44">        return estado;</span>
+<span class="fc" id="L82">        return estado;</span>
     }
 
     public Usuario getSocio() {
-<span class="fc" id="L48">        return socio;</span>
+<span class="fc" id="L86">        return socio;</span>
     }
 
     public LocalDate getFechaLimite() {
-<span class="fc" id="L52">        return fechaLimite;</span>
+<span class="fc" id="L90">        return fechaLimite;</span>
     }
 
     public LocalDate getFechaDeDevolucion() {
-<span class="fc" id="L56">        return fechaDeDevolucion;</span>
+<span class="fc" id="L94">        return fechaDeDevolucion;</span>
     }
 
     public Integer getCantidadDeRenovaciones() {
-<span class="fc" id="L60">        return cantidadDeRenovaciones;</span>
+<span class="fc" id="L98">        return cantidadDeRenovaciones;</span>
     }
 
     public Libro getEjemplar(){
-<span class="fc" id="L64">        return ejemplar;</span>
+<span class="fc" id="L102">        return ejemplar;</span>
     }
 
-    public void setFechaLimite(LocalDate fechaLimite) {
-<span class="fc" id="L68">        this.fechaLimite = fechaLimite;</span>
-<span class="fc" id="L69">    }</span>
+    public Integer getId() {
+<span class="nc" id="L106">        return id;</span>
+    }
 
-    public void setEstado(Estado estado) {
-<span class="fc" id="L72">        this.estado = estado;</span>
-<span class="fc" id="L73">    }</span>
-
-    public void setFechaDeDevolucion(LocalDate fechaDeDevolucion) {
-<span class="fc" id="L76">        this.fechaDeDevolucion = fechaDeDevolucion;</span>
-<span class="fc" id="L77">    }</span>
+    public LocalDate getFechaDeInicio() {
+<span class="nc" id="L110">        return fechaDeInicio;</span>
+    }
     
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
