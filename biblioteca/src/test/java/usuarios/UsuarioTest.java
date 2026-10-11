@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import ar.edu.unahur.obj2.usuarios.Usuario;
 
@@ -89,6 +90,20 @@ public class UsuarioTest {
         assertThrows(NullPointerException.class, () -> new Usuario("Agus", "Aguero", 
             "46787883", 20, 
             "3755578920", null));
+    }
+
+    @Test 
+    void deberiaEstablecerUnLimiteDePrestamos(){
+        usuario.establecerLimiteDePrestamos(3);
+
+        assertEquals(3, usuario.getLimiteDePrestamos());
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeEstableceUnLimiteDePrestamosInvalido(){
+        Executable act = () -> usuario.establecerLimiteDePrestamos(0);
+    
+        assertThrows(IllegalArgumentException.class, act);
     }
 
 }

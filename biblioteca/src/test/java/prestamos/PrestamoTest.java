@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import ar.edu.unahur.obj2.exceptions.FechaInvalidaException;
+import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
 import ar.edu.unahur.obj2.libros.Libro;
 import ar.edu.unahur.obj2.prestamos.Prestamo;
 import ar.edu.unahur.obj2.usuarios.Usuario;
@@ -140,6 +141,22 @@ public class PrestamoTest {
             LocalDate.of(2026, 10, 1), -1);
 
         assertThrows(IllegalArgumentException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeFinalizaUnPrestamoYaFinalizado(){
+        prestamo.finalizarPrestamo();
+
+        Executable act = () -> prestamo.finalizarPrestamo();
+
+        assertThrows(PrestamoFinalizadoException.class, act);
+    }
+
+    @Test 
+    void deberiaExtenderLaFechaLimite(){
+        prestamo.extenderFechaLimite(5);
+
+        assertEquals(LocalDate.of(2026, 8, 30), prestamo.getFechaLimite());
     }
 
 }

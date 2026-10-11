@@ -63,8 +63,8 @@ public class Prestamo {
 <span class="fc" id="L63">    }</span>
 
     public void finalizarPrestamo(){
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if(estado == Estado.FINALIZADO){</span>
-<span class="nc" id="L67">            throw new PrestamoFinalizadoException(&quot;El prestamo se encuentra finalizado&quot;);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if(estado == Estado.FINALIZADO){</span>
+<span class="fc" id="L67">            throw new PrestamoFinalizadoException(&quot;El prestamo se encuentra finalizado&quot;);</span>
         }
         
 <span class="fc" id="L70">        estado = Estado.FINALIZADO;</span>

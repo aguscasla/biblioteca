@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 biblioteca,ar.edu.unahur.obj2.usuarios,Usuario.Estado,0,27,0,0,0,5,0,1,0,1
-biblioteca,ar.edu.unahur.obj2.usuarios,Usuario,20,74,1,1,6,22,6,8,5,8
+biblioteca,ar.edu.unahur.obj2.usuarios,Usuario,15,79,0,2,5,23,5,9,5,8
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioSinPrestamosDisponiblesException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioNoRegistradoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioYaRegistradoException,0,4,0,0,0,2,0,1,0,1
@@ -21,5 +21,5 @@ biblioteca,ar.edu.unahur.obj2.libros,Libro.Estado,0,27,0,0,0,5,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.libros,Libro.Idioma,0,33,0,0,0,6,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.libros,Libro.Categoria,0,147,0,0,0,25,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo.Estado,0,15,0,0,0,3,0,1,0,1
-biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo,11,134,1,11,3,33,3,17,2,12
+biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo,6,139,0,12,2,34,2,18,2,12
 biblioteca,ar.edu.unahur.obj2.biblioteca,Biblioteca,7,398,2,46,2,91,4,47,2,25
