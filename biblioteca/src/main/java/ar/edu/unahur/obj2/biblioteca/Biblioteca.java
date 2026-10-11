@@ -162,6 +162,7 @@ public class Biblioteca {
     public Prestamo obtenerPrestamo(Libro libro){
         Prestamo prestamo = prestamos.stream()
                 .filter(p -> p.getEjemplar().equals(libro))
+                .filter(p -> p.getEstado() == Prestamo.Estado.EN_CURSO)
                 .findFirst()
                 .orElse(null);
 
@@ -231,7 +232,7 @@ public class Biblioteca {
     public void eliminarLibroDelCatalogo(Integer idDelLibro){
         Libro libro = catalogo.obtenerLibro(idDelLibro);
 
-        if(libro.getEstado() != Libro.Estado.PRESTADO){
+        if(libro.getEstado() == Libro.Estado.PRESTADO){
             throw new LibroNoDisponibleException("El libro no se encuentra disponible");
         }
 
@@ -242,7 +243,7 @@ public class Biblioteca {
         return catalogo.obtenerLibro(idDelLibro);
     }
 
-    public Libro obtenerPrimerLibroDisponible(String tituloDelLibro){
+    public Libro obtenerLibroDisponible(String tituloDelLibro){
         return catalogo.obtenerLibroDisponible(tituloDelLibro);
     }
 
