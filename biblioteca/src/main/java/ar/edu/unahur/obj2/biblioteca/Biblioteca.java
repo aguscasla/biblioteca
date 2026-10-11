@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import ar.edu.unahur.obj2.exceptions.LibroInexistenteException;
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
+import ar.edu.unahur.obj2.exceptions.PrestamoNoEncontradoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
 import ar.edu.unahur.obj2.exceptions.PrestamoVencidoException;
 import ar.edu.unahur.obj2.exceptions.UsuarioInactivoException;
@@ -24,13 +24,14 @@ import ar.edu.unahur.obj2.usuarios.Usuario;
 
 public class Biblioteca {
 
-    private ArrayList<Libro> catalogo = new ArrayList<>();
+    private Catalogo catalogo;
     private Map<String, Usuario> socios = new HashMap<>();
     private ArrayList<Prestamo> prestamos = new ArrayList<>();
     private Clock reloj;
 
     public Biblioteca(Clock reloj) {
         this.reloj = reloj;
+        this.catalogo = new Catalogo();
     }
 
     public void asociarUsuario(Usuario usuario, Integer limiteDePrestamos){
@@ -134,7 +135,11 @@ public class Biblioteca {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void renovarPrestamo(Prestamo prestamo){
+    public void renovarPrestamo(Integer idDelLibro){
+        Libro libro = catalogo.obtenerLibro(idDelLibro);
+
+        Prestamo prestamo = obtenerPrestamo(libro);
+
         LocalDate hoy = LocalDate.now(reloj);
 
         if(prestamo.getEstado() == Prestamo.Estado.FINALIZADO){
@@ -154,17 +159,34 @@ public class Biblioteca {
 
     }
 
-    public void finalizarPrestamo(Prestamo prestamo){
-        LocalDate hoy = LocalDate.now(reloj);
-        Libro ejemplarDevuelto = prestamo.getEjemplar();
+    public Prestamo obtenerPrestamo(Libro libro){
+        Prestamo prestamo = prestamos.stream()
+                .filter(p -> p.getEjemplar().equals(libro))
+                .findFirst()
+                .orElse(null);
 
-        prestamo.finalizarPrestamo();
-        prestamo.establecerFechaDeDevolucion(hoy);
-        ejemplarDevuelto.habilitar();
+        if(prestamo == null){
+            throw new PrestamoNoEncontradoException();
+        }
+
+        return prestamo;
+    }
+
+    public void finalizarPrestamo(Integer idDelLibro){
+
+        Libro libro = catalogo.obtenerLibro(idDelLibro);
+
+        Prestamo prestamoAFinalizar = obtenerPrestamo(libro);
+
+        LocalDate hoy = LocalDate.now(reloj);
+
+        prestamoAFinalizar.finalizarPrestamo();
+        prestamoAFinalizar.establecerFechaDeDevolucion(hoy);
+        libro.habilitar();
 
     }
 
-    public void validarPrestamo(Usuario socio, Libro ejemplar){
+    public void validarPrestamo(Usuario socio){
         
         if(estaInfringiendoLasNormas(socio)){
             throw new UsuarioInhabilitadoException("El usuario no se encuentra habilitado para solicitar un prestamo");
@@ -178,14 +200,6 @@ public class Biblioteca {
             throw new UsuarioSinPrestamosDisponiblesException("El usuario alcanzo el limite de prestamos");
         }
 
-        if(ejemplar == null){
-            throw new LibroInexistenteException("El libro no existe");
-        }
-
-        if(ejemplar.getEstado() != Libro.Estado.DISPONIBLE){
-            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
-        }
-
     }
 
     public ArrayList<Prestamo> prestamosEnCursoDelUsuario(Usuario socio){
@@ -194,27 +208,52 @@ public class Biblioteca {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Prestamo otorgarPrestamo(Integer idDelPrestamo, String dniDelUsuario, Libro ejemplar, LocalDate fechaDeInicio,
+    public void otorgarPrestamo(Integer idDelPrestamo, String dniDelUsuario, String tituloDelLibro, LocalDate fechaDeInicio,
                                         LocalDate fechaDeLimite, Integer cantidadDeRenovaciones){
 
         Usuario socio = obtenerUsuario(dniDelUsuario);
 
-        validarPrestamo(socio, ejemplar);
+        Libro libro = catalogo.obtenerLibroDisponible(tituloDelLibro);
 
-        Prestamo prestamo = new Prestamo(idDelPrestamo, socio, ejemplar, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);
+        validarPrestamo(socio);
 
-        ejemplar.prestar();
+        Prestamo prestamo = new Prestamo(idDelPrestamo, socio, libro, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);
+
+        libro.prestar();
         prestamos.add(prestamo);
 
-        return prestamo;
     }
 
-    public ArrayList<Libro> getCatalogo() {
-        return catalogo;
+    public void agregarLibroAlCatalogo(Libro libro){
+        catalogo.agregarLibro(libro);
     }
+
+    public void eliminarLibroDelCatalogo(Integer idDelLibro){
+        Libro libro = catalogo.obtenerLibro(idDelLibro);
+
+        if(libro.getEstado() != Libro.Estado.PRESTADO){
+            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
+        }
+
+        catalogo.eliminarLibro(idDelLibro);
+    }
+
+    public Libro obtenerLibroDelCatalogo(Integer idDelLibro){
+        return catalogo.obtenerLibro(idDelLibro);
+    }
+
+    public Libro obtenerPrimerLibroDisponible(String tituloDelLibro){
+        return catalogo.obtenerLibroDisponible(tituloDelLibro);
+    }
+
+    // getters
 
     public Map<String, Usuario> getSocios() {
         return socios;
+    }
+
+    public Catalogo getCatalogo() {
+        return catalogo;
     }
 
     public ArrayList<Prestamo> getPrestamos() {
