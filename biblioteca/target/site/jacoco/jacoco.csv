@@ -24,5 +24,5 @@ biblioteca,ar.edu.unahur.obj2.libros,Libro.Estado,0,27,0,0,0,5,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.libros,Libro.Categoria,0,147,0,0,0,25,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo.Estado,0,15,0,0,0,3,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo,6,139,0,12,2,34,2,18,2,12
-biblioteca,ar.edu.unahur.obj2.biblioteca,Biblioteca,9,454,3,45,2,105,4,53,1,32
+biblioteca,ar.edu.unahur.obj2.biblioteca,Biblioteca,4,459,2,46,1,106,3,54,1,32
 biblioteca,ar.edu.unahur.obj2.biblioteca,Catalogo,0,101,0,12,0,25,0,13,0,7

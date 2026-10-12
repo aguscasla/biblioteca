@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
-import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoEncontradoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
 import ar.edu.unahur.obj2.exceptions.PrestamoVencidoException;

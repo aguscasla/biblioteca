@@ -228,8 +228,8 @@ public class Biblioteca {
     public void eliminarLibroDelCatalogo(Integer idDelLibro){
 <span class="fc" id="L229">        Libro libro = catalogo.obtenerLibro(idDelLibro);</span>
 
-<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        if(libro.getEstado() == Libro.Estado.PRESTADO){</span>
-<span class="nc" id="L232">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        if(libro.getEstado() == Libro.Estado.PRESTADO){</span>
+<span class="fc" id="L232">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
         }
 
 <span class="fc" id="L235">        catalogo.eliminarLibro(idDelLibro);</span>

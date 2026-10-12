@@ -458,4 +458,16 @@ public class BibliotecaTest {
 
         assertThrows(LibroNoDisponibleException.class, act);
     }
+
+    @Test 
+    void deberiaLanzarUnaExepcionAlEliminarUnLibro_SiElLibroSeEncuentraPrestado(){
+        biblioteca.asociarUsuario(usuario, 2);
+
+        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", 
+            LocalDate.of(2026, 9, 10), LocalDate.of(2026, 10, 1), 2);
+
+        Executable act = () -> biblioteca.eliminarLibroDelCatalogo(1);
+
+        assertThrows(LibroNoDisponibleException.class, act);
+    }
 }
