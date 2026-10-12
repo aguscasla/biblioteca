@@ -246,7 +246,7 @@ public class BibliotecaTest {
     void noDeberiaOtorgarUnPrestamo_SiUnEJemplarNoExiste(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        assertThrows(LibroNoDisponibleException.class, () -> 
+        assertThrows(LibroNoRegistradoException.class, () -> 
             biblioteca.otorgarPrestamo(1, "46787883", null, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2));
     }

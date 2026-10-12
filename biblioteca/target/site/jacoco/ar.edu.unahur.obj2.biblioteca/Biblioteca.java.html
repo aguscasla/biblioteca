@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
-import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoEncontradoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
 import ar.edu.unahur.obj2.exceptions.PrestamoVencidoException;
@@ -25,232 +24,232 @@ import ar.edu.unahur.obj2.usuarios.Usuario;
 public class Biblioteca {
 
     private Catalogo catalogo;
-<span class="fc" id="L28">    private Map&lt;String, Usuario&gt; socios = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L29">    private ArrayList&lt;Prestamo&gt; prestamos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L27">    private Map&lt;String, Usuario&gt; socios = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L28">    private ArrayList&lt;Prestamo&gt; prestamos = new ArrayList&lt;&gt;();</span>
     private Clock reloj;
 
-<span class="fc" id="L32">    public Biblioteca(Clock reloj) {</span>
-<span class="fc" id="L33">        this.reloj = reloj;</span>
-<span class="fc" id="L34">        this.catalogo = new Catalogo();</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L31">    public Biblioteca(Clock reloj) {</span>
+<span class="fc" id="L32">        this.reloj = reloj;</span>
+<span class="fc" id="L33">        this.catalogo = new Catalogo();</span>
+<span class="fc" id="L34">    }</span>
 
     public void asociarUsuario(Usuario usuario, Integer limiteDePrestamos){
     
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (usuario == null) {</span>
-<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;El usuario no puede ser null.&quot;);</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (usuario == null) {</span>
+<span class="fc" id="L39">            throw new IllegalArgumentException(&quot;El usuario no puede ser null.&quot;);</span>
         }
 
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (socios.containsKey(usuario.getDni())) {</span>
-<span class="fc" id="L44">            throw new UsuarioYaRegistradoException(&quot;El usuario ya se encuentra registrado.&quot;);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (socios.containsKey(usuario.getDni())) {</span>
+<span class="fc" id="L43">            throw new UsuarioYaRegistradoException(&quot;El usuario ya se encuentra registrado.&quot;);</span>
         }
         
-<span class="fc" id="L47">        usuario.establecerLimiteDePrestamos(limiteDePrestamos);</span>
-<span class="fc" id="L48">        usuario.darDeAlta();</span>
+<span class="fc" id="L46">        usuario.establecerLimiteDePrestamos(limiteDePrestamos);</span>
+<span class="fc" id="L47">        usuario.darDeAlta();</span>
         
-<span class="fc" id="L50">        socios.put(usuario.getDni(), usuario);</span>
+<span class="fc" id="L49">        socios.put(usuario.getDni(), usuario);</span>
 
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L51">    }</span>
 
     public void reasociarUsuario(String dniUsuario){
-<span class="fc" id="L55">        Usuario usuario = obtenerUsuario(dniUsuario);</span>
+<span class="fc" id="L54">        Usuario usuario = obtenerUsuario(dniUsuario);</span>
 
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        if(usuario.getEstado() != Usuario.Estado.BAJA_VOLUNTARIA){</span>
-<span class="fc" id="L58">            throw new UsuarioNoReasociableException(&quot;Solamente se permite reasociar a los usuarios con baja voluntaria&quot;);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if(usuario.getEstado() != Usuario.Estado.BAJA_VOLUNTARIA){</span>
+<span class="fc" id="L57">            throw new UsuarioNoReasociableException(&quot;Solamente se permite reasociar a los usuarios con baja voluntaria&quot;);</span>
         }
 
-<span class="fc" id="L61">        usuario.darDeAlta();</span>
+<span class="fc" id="L60">        usuario.darDeAlta();</span>
 
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L62">    }</span>
 
     public void desasociarUsuario(String dniUsuario){
-<span class="fc" id="L66">        Usuario usuario = obtenerUsuario(dniUsuario);</span>
+<span class="fc" id="L65">        Usuario usuario = obtenerUsuario(dniUsuario);</span>
 
-<span class="fc bfc" id="L68" title="All 2 branches covered.">        if(usuario.getEstado() != Usuario.Estado.ACTIVO){</span>
-<span class="fc" id="L69">            throw new UsuarioInactivoException(&quot;El usuario no se encuentra activo.&quot;);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if(usuario.getEstado() != Usuario.Estado.ACTIVO){</span>
+<span class="fc" id="L68">            throw new UsuarioInactivoException(&quot;El usuario no se encuentra activo.&quot;);</span>
         }
 
-<span class="fc" id="L72">        usuario.darBajaVoluntaria();</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L71">        usuario.darBajaVoluntaria();</span>
+<span class="fc" id="L72">    }</span>
 
     public void inhabilitarUsuario(String dniUsuario){
-<span class="fc" id="L76">        Usuario usuario = obtenerUsuario(dniUsuario);</span>
+<span class="fc" id="L75">        Usuario usuario = obtenerUsuario(dniUsuario);</span>
 
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        if(usuario.getEstado() == Usuario.Estado.INHABILITADO){</span>
-<span class="fc" id="L79">            throw new UsuarioInhabilitadoException(&quot;El usuario ya se encuentra inhabilitado.&quot;);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if(usuario.getEstado() == Usuario.Estado.INHABILITADO){</span>
+<span class="fc" id="L78">            throw new UsuarioInhabilitadoException(&quot;El usuario ya se encuentra inhabilitado.&quot;);</span>
         }
 
-<span class="fc" id="L82">        usuario.inhabilitar();</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L81">        usuario.inhabilitar();</span>
+<span class="fc" id="L82">    }</span>
 
     public Usuario obtenerUsuario(String dniDelUsuario){
-<span class="fc" id="L86">        Usuario usuario = socios.get(dniDelUsuario);</span>
+<span class="fc" id="L85">        Usuario usuario = socios.get(dniDelUsuario);</span>
 
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        if(usuario == null){</span>
-<span class="fc" id="L89">            throw new UsuarioNoRegistradoException(&quot;El usuario no se encuentra registrado&quot;);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if(usuario == null){</span>
+<span class="fc" id="L88">            throw new UsuarioNoRegistradoException(&quot;El usuario no se encuentra registrado&quot;);</span>
         }
 
-<span class="fc" id="L92">        return usuario;</span>
+<span class="fc" id="L91">        return usuario;</span>
     }
 
     public void evaluarUsuarios(){
-<span class="fc" id="L96">        socios.forEach((dni, usuario) -&gt; {</span>
-<span class="fc bfc" id="L97" title="All 2 branches covered.">            if(estaInfringiendoLasNormas(usuario)){</span>
-<span class="fc" id="L98">                inhabilitarUsuario(dni);</span>
+<span class="fc" id="L95">        socios.forEach((dni, usuario) -&gt; {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            if(estaInfringiendoLasNormas(usuario)){</span>
+<span class="fc" id="L97">                inhabilitarUsuario(dni);</span>
             }
-<span class="fc" id="L100">        }</span>
+<span class="fc" id="L99">        }</span>
         );
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L101">    }</span>
 
     public Boolean estaInfringiendoLasNormas(Usuario usuario){
-<span class="fc" id="L105">        ArrayList&lt;Prestamo&gt; prestamosDelUsuario = obtenerPrestamosDelUsuario(usuario);</span>
+<span class="fc" id="L104">        ArrayList&lt;Prestamo&gt; prestamosDelUsuario = obtenerPrestamosDelUsuario(usuario);</span>
 
-<span class="fc bfc" id="L107" title="All 4 branches covered.">        return acumulaPrestamosVencidos(prestamosDelUsuario) || (unEjemplarNoHaSidoDevuelto(prestamosDelUsuario));</span>
+<span class="fc bfc" id="L106" title="All 4 branches covered.">        return acumulaPrestamosVencidos(prestamosDelUsuario) || (unEjemplarNoHaSidoDevuelto(prestamosDelUsuario));</span>
     }
 
     public Boolean unEjemplarNoHaSidoDevuelto(ArrayList&lt;Prestamo&gt; prestamosDelUsuario){
-<span class="fc" id="L111">        LocalDate hoy = LocalDate.now(reloj);</span>
+<span class="fc" id="L110">        LocalDate hoy = LocalDate.now(reloj);</span>
 
-<span class="fc" id="L113">        return prestamosDelUsuario.stream()</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">                .filter(prestamo -&gt; prestamo.getEstado() == Prestamo.Estado.EN_CURSO)</span>
-<span class="fc" id="L115">                .anyMatch(prestamo -&gt; {</span>
-<span class="fc" id="L116">                            return hoy.isAfter(prestamo.getFechaLimite().plusDays(7));</span>
+<span class="fc" id="L112">        return prestamosDelUsuario.stream()</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                .filter(prestamo -&gt; prestamo.getEstado() == Prestamo.Estado.EN_CURSO)</span>
+<span class="fc" id="L114">                .anyMatch(prestamo -&gt; {</span>
+<span class="fc" id="L115">                            return hoy.isAfter(prestamo.getFechaLimite().plusDays(7));</span>
                 }
         );
     }       
 
     public Boolean acumulaPrestamosVencidos(ArrayList&lt;Prestamo&gt; prestamosDelUsuario){
 
-<span class="fc" id="L123">        Integer cantidadDePrestamosVencidos = (int) prestamosDelUsuario.stream()</span>
-<span class="fc" id="L124">                .filter(prestamo -&gt; prestamo.getEstado().equals(Prestamo.Estado.FINALIZADO))</span>
-<span class="pc bpc" id="L125" title="1 of 2 branches missed.">                .filter(prestamo -&gt; prestamo.getFechaDeDevolucion() != null)</span>
-<span class="fc" id="L126">                .filter(prestamo -&gt; prestamo.getFechaDeDevolucion().isAfter(prestamo.getFechaLimite()))</span>
-<span class="fc" id="L127">                .count();</span>
+<span class="fc" id="L122">        Integer cantidadDePrestamosVencidos = (int) prestamosDelUsuario.stream()</span>
+<span class="fc" id="L123">                .filter(prestamo -&gt; prestamo.getEstado().equals(Prestamo.Estado.FINALIZADO))</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">                .filter(prestamo -&gt; prestamo.getFechaDeDevolucion() != null)</span>
+<span class="fc" id="L125">                .filter(prestamo -&gt; prestamo.getFechaDeDevolucion().isAfter(prestamo.getFechaLimite()))</span>
+<span class="fc" id="L126">                .count();</span>
 
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        return cantidadDePrestamosVencidos &gt;= 3;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        return cantidadDePrestamosVencidos &gt;= 3;</span>
     }
 
     public ArrayList&lt;Prestamo&gt; obtenerPrestamosDelUsuario(Usuario usuario){
-<span class="fc" id="L133">        return prestamos.stream()</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">                .filter(prestamo -&gt; prestamo.getSocio() == usuario)</span>
-<span class="fc" id="L135">                .collect(Collectors.toCollection(ArrayList::new));</span>
+<span class="fc" id="L132">        return prestamos.stream()</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">                .filter(prestamo -&gt; prestamo.getSocio() == usuario)</span>
+<span class="fc" id="L134">                .collect(Collectors.toCollection(ArrayList::new));</span>
     }
 
     public void renovarPrestamo(Integer idDelLibro){
-<span class="fc" id="L139">        Libro libro = catalogo.obtenerLibro(idDelLibro);</span>
+<span class="fc" id="L138">        Libro libro = catalogo.obtenerLibro(idDelLibro);</span>
 
-<span class="fc" id="L141">        Prestamo prestamo = obtenerPrestamo(libro);</span>
+<span class="fc" id="L140">        Prestamo prestamo = obtenerPrestamo(libro);</span>
 
-<span class="fc" id="L143">        LocalDate hoy = LocalDate.now(reloj);</span>
+<span class="fc" id="L142">        LocalDate hoy = LocalDate.now(reloj);</span>
 
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if(prestamo.estaVencido(hoy)){</span>
-<span class="fc" id="L146">            throw new PrestamoVencidoException(&quot;El prestamo se encuentra vencido.&quot;);</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if(prestamo.estaVencido(hoy)){</span>
+<span class="fc" id="L145">            throw new PrestamoVencidoException(&quot;El prestamo se encuentra vencido.&quot;);</span>
         }
 
-<span class="pc bpc" id="L149" title="1 of 4 branches missed.">        if(!(!hoy.isBefore(prestamo.getFechaLimite().minusDays(2)) &amp;&amp; !hoy.isAfter(prestamo.getFechaLimite()))){</span>
-<span class="fc" id="L150">            throw new PrestamoNoRenovableException(&quot;El prestamo no puede ser renovado fuera de fecha.&quot;);</span>
+<span class="pc bpc" id="L148" title="1 of 4 branches missed.">        if(!(!hoy.isBefore(prestamo.getFechaLimite().minusDays(2)) &amp;&amp; !hoy.isAfter(prestamo.getFechaLimite()))){</span>
+<span class="fc" id="L149">            throw new PrestamoNoRenovableException(&quot;El prestamo no puede ser renovado fuera de fecha.&quot;);</span>
         }
         
-<span class="fc" id="L153">        prestamo.descontarRenovacion();</span>
-<span class="fc" id="L154">        prestamo.extenderFechaLimite(7);</span>
+<span class="fc" id="L152">        prestamo.descontarRenovacion();</span>
+<span class="fc" id="L153">        prestamo.extenderFechaLimite(7);</span>
 
-<span class="fc" id="L156">    }</span>
+<span class="fc" id="L155">    }</span>
 
     public Prestamo obtenerPrestamo(Libro libro){
-<span class="fc" id="L159">        Prestamo prestamo = prestamos.stream()</span>
-<span class="fc" id="L160">                .filter(p -&gt; p.getEjemplar().equals(libro))</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">                .filter(p -&gt; p.getEstado() == Prestamo.Estado.EN_CURSO)</span>
-<span class="fc" id="L162">                .findFirst()</span>
-<span class="fc" id="L163">                .orElse(null);</span>
+<span class="fc" id="L158">        Prestamo prestamo = prestamos.stream()</span>
+<span class="fc" id="L159">                .filter(p -&gt; p.getEjemplar().equals(libro))</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">                .filter(p -&gt; p.getEstado() == Prestamo.Estado.EN_CURSO)</span>
+<span class="fc" id="L161">                .findFirst()</span>
+<span class="fc" id="L162">                .orElse(null);</span>
 
-<span class="fc bfc" id="L165" title="All 2 branches covered.">        if(prestamo == null){</span>
-<span class="fc" id="L166">            throw new PrestamoNoEncontradoException();</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if(prestamo == null){</span>
+<span class="fc" id="L165">            throw new PrestamoNoEncontradoException();</span>
         }
 
-<span class="fc" id="L169">        return prestamo;</span>
+<span class="fc" id="L168">        return prestamo;</span>
     }
 
     public void finalizarPrestamo(Integer idDelLibro){
 
-<span class="fc" id="L174">        Libro libro = catalogo.obtenerLibro(idDelLibro);</span>
+<span class="fc" id="L173">        Libro libro = catalogo.obtenerLibro(idDelLibro);</span>
 
-<span class="fc" id="L176">        Prestamo prestamoAFinalizar = obtenerPrestamo(libro);</span>
+<span class="fc" id="L175">        Prestamo prestamoAFinalizar = obtenerPrestamo(libro);</span>
 
-<span class="fc" id="L178">        LocalDate hoy = LocalDate.now(reloj);</span>
+<span class="fc" id="L177">        LocalDate hoy = LocalDate.now(reloj);</span>
 
-<span class="fc" id="L180">        prestamoAFinalizar.finalizarPrestamo();</span>
-<span class="fc" id="L181">        prestamoAFinalizar.establecerFechaDeDevolucion(hoy);</span>
-<span class="fc" id="L182">        libro.habilitar();</span>
+<span class="fc" id="L179">        prestamoAFinalizar.finalizarPrestamo();</span>
+<span class="fc" id="L180">        prestamoAFinalizar.establecerFechaDeDevolucion(hoy);</span>
+<span class="fc" id="L181">        libro.habilitar();</span>
 
-<span class="fc" id="L184">    }</span>
+<span class="fc" id="L183">    }</span>
 
     public void validarPrestamo(Usuario socio){
         
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if(estaInfringiendoLasNormas(socio)){</span>
-<span class="fc" id="L189">            throw new UsuarioInhabilitadoException(&quot;El usuario no se encuentra habilitado para solicitar un prestamo&quot;);</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if(estaInfringiendoLasNormas(socio)){</span>
+<span class="fc" id="L188">            throw new UsuarioInhabilitadoException(&quot;El usuario no se encuentra habilitado para solicitar un prestamo&quot;);</span>
         }
 
-<span class="fc bfc" id="L192" title="All 2 branches covered.">        if(socio.getEstado() != Usuario.Estado.ACTIVO){</span>
-<span class="fc" id="L193">            throw new UsuarioInactivoException(&quot;El usuario no se encuentra activo&quot;);</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if(socio.getEstado() != Usuario.Estado.ACTIVO){</span>
+<span class="fc" id="L192">            throw new UsuarioInactivoException(&quot;El usuario no se encuentra activo&quot;);</span>
         }
 
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        if(socio.getLimiteDePrestamos() == prestamosEnCursoDelUsuario(socio).size()) {</span>
-<span class="fc" id="L197">            throw new UsuarioSinPrestamosDisponiblesException(&quot;El usuario alcanzo el limite de prestamos&quot;);</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if(socio.getLimiteDePrestamos() == prestamosEnCursoDelUsuario(socio).size()) {</span>
+<span class="fc" id="L196">            throw new UsuarioSinPrestamosDisponiblesException(&quot;El usuario alcanzo el limite de prestamos&quot;);</span>
         }
 
-<span class="fc" id="L200">    }</span>
+<span class="fc" id="L199">    }</span>
 
     public ArrayList&lt;Prestamo&gt; prestamosEnCursoDelUsuario(Usuario socio){
-<span class="fc" id="L203">        return prestamos.stream()</span>
-<span class="fc bfc" id="L204" title="All 4 branches covered.">                .filter(prestamo -&gt; prestamo.getSocio() == socio &amp;&amp; prestamo.getEstado() == Prestamo.Estado.EN_CURSO)</span>
-<span class="fc" id="L205">                .collect(Collectors.toCollection(ArrayList::new));</span>
+<span class="fc" id="L202">        return prestamos.stream()</span>
+<span class="fc bfc" id="L203" title="All 4 branches covered.">                .filter(prestamo -&gt; prestamo.getSocio() == socio &amp;&amp; prestamo.getEstado() == Prestamo.Estado.EN_CURSO)</span>
+<span class="fc" id="L204">                .collect(Collectors.toCollection(ArrayList::new));</span>
     }
 
     public void otorgarPrestamo(Integer idDelPrestamo, String dniDelUsuario, String tituloDelLibro, LocalDate fechaDeInicio,
                                         LocalDate fechaDeLimite, Integer cantidadDeRenovaciones){
 
-<span class="fc" id="L211">        Usuario socio = obtenerUsuario(dniDelUsuario);</span>
+<span class="fc" id="L210">        Usuario socio = obtenerUsuario(dniDelUsuario);</span>
 
-<span class="fc" id="L213">        Libro libro = catalogo.obtenerLibroDisponible(tituloDelLibro);</span>
+<span class="fc" id="L212">        Libro libro = catalogo.obtenerLibroDisponible(tituloDelLibro);</span>
 
-<span class="fc" id="L215">        validarPrestamo(socio);</span>
+<span class="fc" id="L214">        validarPrestamo(socio);</span>
 
-<span class="fc" id="L217">        Prestamo prestamo = new Prestamo(idDelPrestamo, socio, libro, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);</span>
+<span class="fc" id="L216">        Prestamo prestamo = new Prestamo(idDelPrestamo, socio, libro, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);</span>
 
-<span class="fc" id="L219">        libro.prestar();</span>
-<span class="fc" id="L220">        prestamos.add(prestamo);</span>
+<span class="fc" id="L218">        libro.prestar();</span>
+<span class="fc" id="L219">        prestamos.add(prestamo);</span>
 
-<span class="fc" id="L222">    }</span>
+<span class="fc" id="L221">    }</span>
 
     public void agregarLibroAlCatalogo(Libro libro){
-<span class="fc" id="L225">        catalogo.agregarLibro(libro);</span>
-<span class="fc" id="L226">    }</span>
+<span class="fc" id="L224">        catalogo.agregarLibro(libro);</span>
+<span class="fc" id="L225">    }</span>
 
     public void eliminarLibroDelCatalogo(Integer idDelLibro){
-<span class="fc" id="L229">        Libro libro = catalogo.obtenerLibro(idDelLibro);</span>
+<span class="fc" id="L228">        Libro libro = catalogo.obtenerLibro(idDelLibro);</span>
 
-<span class="fc bfc" id="L231" title="All 2 branches covered.">        if(libro.getEstado() == Libro.Estado.PRESTADO){</span>
-<span class="fc" id="L232">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        if(libro.getEstado() == Libro.Estado.PRESTADO){</span>
+<span class="fc" id="L231">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
         }
 
-<span class="fc" id="L235">        catalogo.eliminarLibro(idDelLibro);</span>
-<span class="fc" id="L236">    }</span>
+<span class="fc" id="L234">        catalogo.eliminarLibro(idDelLibro);</span>
+<span class="fc" id="L235">    }</span>
 
     public Libro obtenerLibroDelCatalogo(Integer idDelLibro){
-<span class="fc" id="L239">        return catalogo.obtenerLibro(idDelLibro);</span>
+<span class="fc" id="L238">        return catalogo.obtenerLibro(idDelLibro);</span>
     }
 
     public Libro obtenerLibroDisponible(String tituloDelLibro){
-<span class="fc" id="L243">        return catalogo.obtenerLibroDisponible(tituloDelLibro);</span>
+<span class="fc" id="L242">        return catalogo.obtenerLibroDisponible(tituloDelLibro);</span>
     }
 
     // getters
 
     public Map&lt;String, Usuario&gt; getSocios() {
-<span class="fc" id="L249">        return socios;</span>
+<span class="fc" id="L248">        return socios;</span>
     }
 
     public ArrayList&lt;Prestamo&gt; getPrestamos() {
-<span class="nc" id="L253">        return prestamos;</span>
+<span class="nc" id="L252">        return prestamos;</span>
     }
 
 }

@@ -94,7 +94,7 @@ public class CatalogoTest {
     void deberiaLanzarUnaExcepcion_SiNoHayNingunLibroQueConcidaConElTitulo(){
         Executable act = () -> catalogo.obtenerLibroDisponible("Harry Potter");
 
-        assertThrows(LibroNoDisponibleException.class, act);
+        assertThrows(LibroNoRegistradoException.class, act);
     }
 
     @Test 

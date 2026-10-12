@@ -16,7 +16,6 @@ biblioteca,ar.edu.unahur.obj2.exceptions,FechaInvalidaException,0,4,0,0,0,2,0,1,
 biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoSinRenovacionesDisponiblesException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,PrestamoNoEncontradoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.exceptions,UsuarioNoRegistradoException,0,4,0,0,0,2,0,1,0,1
-biblioteca,ar.edu.unahur.obj2.exceptions,LibroInexistenteException,4,0,0,0,2,0,1,0,1,0
 biblioteca,ar.edu.unahur.obj2.exceptions,LibroNoRegistradoException,0,4,0,0,0,2,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.libros,Libro.Idioma,0,33,0,0,0,6,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.libros,Libro,20,121,2,12,6,33,7,13,5,8
@@ -25,4 +24,4 @@ biblioteca,ar.edu.unahur.obj2.libros,Libro.Categoria,0,147,0,0,0,25,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo.Estado,0,15,0,0,0,3,0,1,0,1
 biblioteca,ar.edu.unahur.obj2.prestamos,Prestamo,6,139,0,12,2,34,2,18,2,12
 biblioteca,ar.edu.unahur.obj2.biblioteca,Biblioteca,4,459,2,46,1,106,3,54,1,32
-biblioteca,ar.edu.unahur.obj2.biblioteca,Catalogo,0,101,0,12,0,25,0,13,0,7
+biblioteca,ar.edu.unahur.obj2.biblioteca,Catalogo,0,112,0,14,0,29,0,14,0,7

@@ -1,7 +1,6 @@
 ar\edu\unahur\obj2\biblioteca\Catalogo.class
 ar\edu\unahur\obj2\exceptions\PrestamoVencidoException.class
 ar\edu\unahur\obj2\exceptions\UsuarioNoRegistradoException.class
-ar\edu\unahur\obj2\exceptions\LibroInexistenteException.class
 ar\edu\unahur\obj2\exceptions\LibroNoDisponibleException.class
 ar\edu\unahur\obj2\prestamos\Prestamo$Estado.class
 ar\edu\unahur\obj2\exceptions\FechaInvalidaException.class

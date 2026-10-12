@@ -1,6 +1,7 @@
 package ar.edu.unahur.obj2.biblioteca;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
@@ -48,14 +49,21 @@ public class Catalogo {
 
     public Libro obtenerLibroDisponible(String tituloDelLibro){
 
-        Libro libroDisponible = catalogo.values().stream()
-                        .filter(libro -> libro.getTitulo().equals(tituloDelLibro))
-                        .filter(libro -> libro.getEstado() == Libro.Estado.DISPONIBLE)
-                        .findFirst()
-                        .orElse(null);
+        List<Libro> librosDelTitulo = catalogo.values().stream()
+                                        .filter(libro -> libro.getTitulo().equals(tituloDelLibro))
+                                        .toList();
+
+        if(librosDelTitulo.isEmpty()){
+            throw new LibroNoRegistradoException();
+        }
+
+        Libro libroDisponible = librosDelTitulo.stream()
+                                    .filter(libro -> libro.getEstado() == Libro.Estado.DISPONIBLE)
+                                    .findFirst()
+                                    .orElse(null);
 
         if(libroDisponible == null){
-            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
+            throw new LibroNoDisponibleException("No hay libros disponibles para ese titulo");
         }
 
         return libroDisponible;
