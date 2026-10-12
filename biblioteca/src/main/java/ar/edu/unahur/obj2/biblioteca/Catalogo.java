@@ -63,7 +63,7 @@ public class Catalogo {
                                     .orElse(null);
 
         if(libroDisponible == null){
-            throw new LibroNoDisponibleException("No hay libros disponibles para ese titulo");
+            throw new LibroNoDisponibleException();
         }
 
         return libroDisponible;

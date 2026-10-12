@@ -83,7 +83,7 @@ public class Libro {
 
     public void habilitar(){
         if(estado == Estado.INHABILITADO){
-            throw new LibroInhabilitadoException("El libro se encuentra inhabilitado");
+            throw new LibroInhabilitadoException();
         }
 
         if(estado != Estado.DISPONIBLE){
@@ -94,7 +94,7 @@ public class Libro {
 
     public void prestar(){
         if(estado != Estado.DISPONIBLE){
-            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
+            throw new LibroNoDisponibleException();
         }
 
         this.estado = Estado.PRESTADO;
@@ -102,7 +102,7 @@ public class Libro {
 
     public void reparar(){
         if(estado != Estado.DISPONIBLE){
-            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
+            throw new LibroNoDisponibleException();
         }
 
         this.estado = Estado.EN_REPARACION;
@@ -110,7 +110,7 @@ public class Libro {
 
     public void inhabilitar(){
         if(estado == Estado.INHABILITADO){
-            throw new LibroInhabilitadoException("El libro se encuentra inhabilitado");
+            throw new LibroInhabilitadoException();
         }
 
         this.estado = Estado.INHABILITADO;

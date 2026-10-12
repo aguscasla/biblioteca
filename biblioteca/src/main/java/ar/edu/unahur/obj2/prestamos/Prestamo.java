@@ -41,7 +41,7 @@ public class Prestamo {
         }
 
         if(fechaDeInicio.isEqual(fechaLimite) || fechaDeInicio.isAfter(fechaLimite)){
-            throw new FechaInvalidaException("La fecha no es valida");
+            throw new FechaInvalidaException();
         }
 
         if(id <= 0){
@@ -56,7 +56,7 @@ public class Prestamo {
 
     public void descontarRenovacion() {
         if(cantidadDeRenovaciones == 0){
-            throw new PrestamoSinRenovacionesDisponiblesException("El prestamo no cuenta con renovaciones disponibles");
+            throw new PrestamoSinRenovacionesDisponiblesException();
         }
 
         this.cantidadDeRenovaciones -= 1;
@@ -64,7 +64,7 @@ public class Prestamo {
 
     public void finalizarPrestamo(){
         if(estado == Estado.FINALIZADO){
-            throw new PrestamoFinalizadoException("El prestamo se encuentra finalizado");
+            throw new PrestamoFinalizadoException();
         }
         
         estado = Estado.FINALIZADO;

@@ -2,8 +2,8 @@ package ar.edu.unahur.obj2.exceptions;
 
 public class PrestamoNoRenovableException extends RuntimeException{
 
-    public PrestamoNoRenovableException(String message) {
-        super(message);
+    public PrestamoNoRenovableException() {
+        super("El prestamo no es renovable");
     }
 
 }

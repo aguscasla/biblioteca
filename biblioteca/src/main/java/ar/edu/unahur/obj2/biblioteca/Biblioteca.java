@@ -40,7 +40,7 @@ public class Biblioteca {
         }
 
         if (socios.containsKey(usuario.getDni())) {
-            throw new UsuarioYaRegistradoException("El usuario ya se encuentra registrado.");
+            throw new UsuarioYaRegistradoException();
         }
         
         usuario.establecerLimiteDePrestamos(limiteDePrestamos);
@@ -54,7 +54,7 @@ public class Biblioteca {
         Usuario usuario = obtenerUsuario(dniUsuario);
 
         if(usuario.getEstado() != Usuario.Estado.BAJA_VOLUNTARIA){
-            throw new UsuarioNoReasociableException("Solamente se permite reasociar a los usuarios con baja voluntaria");
+            throw new UsuarioNoReasociableException();
         }
 
         usuario.darDeAlta();
@@ -65,7 +65,7 @@ public class Biblioteca {
         Usuario usuario = obtenerUsuario(dniUsuario);
 
         if(usuario.getEstado() != Usuario.Estado.ACTIVO){
-            throw new UsuarioInactivoException("El usuario no se encuentra activo.");
+            throw new UsuarioInactivoException();
         }
 
         usuario.darBajaVoluntaria();
@@ -75,7 +75,7 @@ public class Biblioteca {
         Usuario usuario = obtenerUsuario(dniUsuario);
 
         if(usuario.getEstado() == Usuario.Estado.INHABILITADO){
-            throw new UsuarioInhabilitadoException("El usuario ya se encuentra inhabilitado.");
+            throw new UsuarioInhabilitadoException();
         }
 
         usuario.inhabilitar();
@@ -85,7 +85,7 @@ public class Biblioteca {
         Usuario usuario = socios.get(dniDelUsuario);
 
         if(usuario == null){
-            throw new UsuarioNoRegistradoException("El usuario no se encuentra registrado");
+            throw new UsuarioNoRegistradoException();
         }
 
         return usuario;
@@ -142,11 +142,11 @@ public class Biblioteca {
         LocalDate hoy = LocalDate.now(reloj);
 
         if(prestamo.estaVencido(hoy)){
-            throw new PrestamoVencidoException("El prestamo se encuentra vencido.");
+            throw new PrestamoVencidoException();
         }
 
         if(!(!hoy.isBefore(prestamo.getFechaLimite().minusDays(2)) && !hoy.isAfter(prestamo.getFechaLimite()))){
-            throw new PrestamoNoRenovableException("El prestamo no puede ser renovado fuera de fecha.");
+            throw new PrestamoNoRenovableException();
         }
         
         prestamo.descontarRenovacion();
@@ -185,15 +185,15 @@ public class Biblioteca {
     public void validarPrestamo(Usuario socio){
         
         if(estaInfringiendoLasNormas(socio)){
-            throw new UsuarioInhabilitadoException("El usuario no se encuentra habilitado para solicitar un prestamo");
+            throw new UsuarioInhabilitadoException();
         }
 
         if(socio.getEstado() != Usuario.Estado.ACTIVO){
-            throw new UsuarioInactivoException("El usuario no se encuentra activo");
+            throw new UsuarioInactivoException();
         }
 
         if(socio.getLimiteDePrestamos() == prestamosEnCursoDelUsuario(socio).size()) {
-            throw new UsuarioSinPrestamosDisponiblesException("El usuario alcanzo el limite de prestamos");
+            throw new UsuarioSinPrestamosDisponiblesException();
         }
 
     }
@@ -228,7 +228,7 @@ public class Biblioteca {
         Libro libro = catalogo.obtenerLibro(idDelLibro);
 
         if(libro.getEstado() == Libro.Estado.PRESTADO){
-            throw new LibroNoDisponibleException("El libro no se encuentra disponible");
+            throw new LibroNoDisponibleException();
         }
 
         catalogo.eliminarLibro(idDelLibro);
