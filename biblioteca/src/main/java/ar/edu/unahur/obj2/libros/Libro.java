@@ -8,14 +8,12 @@ import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 
 public class Libro {
 
-    private static Integer siguienteId = 1;
-
     private String titulo;
     private String autor;
     private Categoria categoria;
     private LocalDate fechaDePublicacion;
     private Estado estado;
-    private Integer id = 0;
+    private Integer id;
     private Integer cantidadDePaginas;
     private Idioma idioma;
 
@@ -61,7 +59,7 @@ public class Libro {
         TERROR
     }
 
-    public Libro(String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
+    public Libro(Integer id, String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
             Integer cantidadDePaginas, Idioma idioma) {
                 
         this.titulo = Objects.requireNonNull(titulo, "El titulo es obligatorio");
@@ -70,13 +68,17 @@ public class Libro {
         this.fechaDePublicacion = Objects.requireNonNull(fechaDePublicacion, "La fecha de publicacion es obligatoria");
         this.cantidadDePaginas = Objects.requireNonNull(cantidadDePaginas, "La cantidad de paginas es obligatoria");
         this.idioma = Objects.requireNonNull(idioma, "El idioma es obligatorio");
+        this.id = id;
 
         if(cantidadDePaginas <= 0){
             throw new IllegalArgumentException("La cantidad de paginas es invalida");
         }
 
+        if(id <= 0){
+            throw new IllegalArgumentException("El id no puede ser igual o menor a cero");
+        }
+
         this.estado = Estado.DISPONIBLE;
-        this.id = siguienteId++;
     }
 
     public void habilitar(){
