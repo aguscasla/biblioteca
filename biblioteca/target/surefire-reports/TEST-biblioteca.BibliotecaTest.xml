@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="biblioteca.BibliotecaTest" time="0.349" tests="34" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="biblioteca.BibliotecaTest" time="0.387" tests="38" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="AR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21.0.12\bin"/>
-    <property name="sun.java.command" value="C:\Users\cuent\AppData\Local\Temp\surefire16984839824096756512\surefirebooter-20261011000400932_3.jar C:\Users\cuent\AppData\Local\Temp\surefire16984839824096756512 2026-10-11T00-04-00_707-jvmRun1 surefire-20261011000400932_1tmp surefire_0-20261011000400932_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\cuent\AppData\Local\Temp\surefire18106902412279339863\surefirebooter-20261012180248100_3.jar C:\Users\cuent\AppData\Local\Temp\surefire18106902412279339863 2026-10-12T18-02-47_899-jvmRun1 surefire-20261012180248100_1tmp surefire_0-20261012180248100_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\target\test-classes;c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\target\classes;C:\Users\cuent\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.12.0\junit-jupiter-engine-5.12.0.jar;C:\Users\cuent\.m2\repository\org\junit\platform\junit-platform-engine\1.12.0\junit-platform-engine-1.12.0.jar;C:\Users\cuent\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\cuent\.m2\repository\org\junit\platform\junit-platform-commons\1.12.0\junit-platform-commons-1.12.0.jar;C:\Users\cuent\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.12.0\junit-jupiter-api-5.12.0.jar;C:\Users\cuent\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\cuent\AppData\Local\Temp\surefire16984839824096756512\surefirebooter-20261011000400932_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\cuent\AppData\Local\Temp\surefire18106902412279339863\surefirebooter-20261012180248100_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.12+7-LTS-205"/>
@@ -58,38 +58,42 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="unPrestamoDeberiaEstarEnCurso_SiSeOtorgaAUnUsuario" classname="biblioteca.BibliotecaTest" time="0.136"/>
-  <testcase name="noDeberiaOtorgarUnPrestamo_SiUnEJemplarNoExiste" classname="biblioteca.BibliotecaTest" time="0.011"/>
-  <testcase name="unUsuarioNoInfringeLasNormas_SiDevuelveSusPrestamosATiempoYNoConservaNingunLibro" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="unPrestamoDeberiaEstarEnCurso_SiSeOtorgaAUnUsuario" classname="biblioteca.BibliotecaTest" time="0.138"/>
+  <testcase name="noDeberiaOtorgarUnPrestamo_SiUnEJemplarNoExiste" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="unUsuarioNoInfringeLasNormas_SiDevuelveSusPrestamosATiempoYNoConservaNingunLibro" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="deberiaLanzarUnaExcepcionAlBuscarUnLibroDelCatalogo_SiSeEliminaElLibroDelCatalogo" classname="biblioteca.BibliotecaTest" time="0.002"/>
   <testcase name="noDeberiaOtorgarUnPrestamo_SiElUsuarioInfringeLasNormas" classname="biblioteca.BibliotecaTest" time="0.004"/>
-  <testcase name="noDeberiaDarDeBajaANingunUsuario_SiNingunoInclumpleLasNormasAlEvaluarlo" classname="biblioteca.BibliotecaTest" time="0.007"/>
-  <testcase name="deberiaAlargarUnaSemanaLaFechaLimiteAlRenovarElPrestamo" classname="biblioteca.BibliotecaTest" time="0.001"/>
-  <testcase name="noDeberiaRenovarUnPrestamo_SiAlcanzoLaCantidadDeRenovacionesDisponibles" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="noDeberiaDarDeBajaANingunUsuario_SiNingunoInclumpleLasNormasAlEvaluarlo" classname="biblioteca.BibliotecaTest" time="0.011"/>
+  <testcase name="deberiaAlargarUnaSemanaLaFechaLimiteAlRenovarElPrestamo" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="noDeberiaRenovarUnPrestamo_SiAlcanzoLaCantidadDeRenovacionesDisponibles" classname="biblioteca.BibliotecaTest" time="0.003"/>
   <testcase name="deberiaAsociarUnUsarioNoRegistrado" classname="biblioteca.BibliotecaTest" time="0.004"/>
-  <testcase name="noDeberiaOtorgarUnPrestamo_SiElUsuarioNoEstaActivo" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="noDeberiaOtorgarUnPrestamo_SiElUsuarioNoEstaActivo" classname="biblioteca.BibliotecaTest" time="0.004"/>
   <testcase name="noDeberiaOtorgarUnPrestamo_SiElEJemplarNoSeEncuentraDisponible" classname="biblioteca.BibliotecaTest" time="0.004"/>
-  <testcase name="noDeberiaInhabilitarUnUsuario_SiYaSeEncuentraInhabilitado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="noDeberiaInhabilitarUnUsuario_SiYaSeEncuentraInhabilitado" classname="biblioteca.BibliotecaTest" time="0.003"/>
   <testcase name="deberiaDescontarUnaRenovacionDeUnPrestamo" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="noDeberiaRenovarUnPrestamo_SiLaFechaActualEstaAMasDeDosDiasDeLaFechaLimite" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="noDeberiaRenovarUnPrestamo_SiLaFechaActualEstaAMasDeDosDiasDeLaFechaLimite" classname="biblioteca.BibliotecaTest" time="0.005"/>
   <testcase name="noDeberiaRenovarUnPrestamo_SiEsteSeEncuentraVencido" classname="biblioteca.BibliotecaTest" time="0.003"/>
-  <testcase name="noDeberiaObtenerUnUsuario_SiElUsuarioNoEstaRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="noDeberiaObtenerUnUsuario_SiElUsuarioNoEstaRegistrado" classname="biblioteca.BibliotecaTest" time="0.003"/>
   <testcase name="deberiaObtenerUnUsuarioRegistrado" classname="biblioteca.BibliotecaTest" time="0.001"/>
   <testcase name="deberiaInhabilitarAUnUsuario_SiEsteNoCumpleLasNormasAlEvaluarlo" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="noDeberiaReasociarUnUsuario_SiNoSeEncuentraRegistrado" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="noDeberiaReasociarUnUsuario_SiNoSeEncuentraRegistrado" classname="biblioteca.BibliotecaTest" time="0.003"/>
   <testcase name="noDeberiaOtorgarUnPrestamo_SiElUsuarioAlcanzoSuLimiteDePrestamos" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="deberiaPoderAgregarUnLibroAlCatalogo" classname="biblioteca.BibliotecaTest" time="0.002"/>
   <testcase name="unUsuarioInfringeLasNormas_SiDevolvioUnEjemplarVencidoEnVariasOcasiones" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="deberiaInhabilitarUnUsuario" classname="biblioteca.BibliotecaTest" time="0.001"/>
+  <testcase name="deberiaPoderObtenerDelCatalogoUnLibroQueEstaDisponible" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="deberiaInhabilitarUnUsuario" classname="biblioteca.BibliotecaTest" time="0.002"/>
   <testcase name="noDeberiaInhabilitarUnUsuario_SiElUsuarioNoEstaRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="deberiaOtorgarUnPrestamoAUnUsuarioRegistrado" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="deberiaOtorgarUnPrestamoAUnUsuarioRegistrado" classname="biblioteca.BibliotecaTest" time="0.003"/>
   <testcase name="noDeberiaReasociarUnUsuario_SiNoSeEncuentraConBajaVoluntaria" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="noDeberiaDesasociarUnUsuario_SiEsteNoEstaRegistrado" classname="biblioteca.BibliotecaTest" time="0.001"/>
+  <testcase name="noDeberiaDesasociarUnUsuario_SiEsteNoEstaRegistrado" classname="biblioteca.BibliotecaTest" time="0.003"/>
   <testcase name="deberiaFinalizarseUnPrestamo" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="noDeberiaAsociarUnUsuario_SiLePasanUnUsuarioConValorNulo" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="noDeberiaAsociarAUnUsuario_SiYaFueAsociado" classname="biblioteca.BibliotecaTest" time="0.004"/>
+  <testcase name="noDeberiaAsociarUnUsuario_SiLePasanUnUsuarioConValorNulo" classname="biblioteca.BibliotecaTest" time="0.003"/>
+  <testcase name="noDeberiaAsociarAUnUsuario_SiYaFueAsociado" classname="biblioteca.BibliotecaTest" time="0.003"/>
   <testcase name="noDeberiaRenovarUnPrestamo_SiNoSeEncuentraEnCurso" classname="biblioteca.BibliotecaTest" time="0.002"/>
   <testcase name="deberiaReasociarAUnUsuario" classname="biblioteca.BibliotecaTest" time="0.001"/>
   <testcase name="deberiaCambiarElEstadoDeUnUsuario_SiSeLoDesasocia" classname="biblioteca.BibliotecaTest" time="0.001"/>
   <testcase name="unUsuarioInfringeLasNormas_SiNoHaDevueltoUnEjemplarLuegoDeUnaSemanaDeSuFechaLimite" classname="biblioteca.BibliotecaTest" time="0.002"/>
   <testcase name="noDeberiaDesasociarUnUsuario_SiNoSeEncuentraActivo" classname="biblioteca.BibliotecaTest" time="0.002"/>
-  <testcase name="unEjemplarFiguraDisponible_SiSeFinalizaSuPrestamo" classname="biblioteca.BibliotecaTest" time="0.001"/>
+  <testcase name="deberiaLanzarUnaExcepcionAlBuscarUnLibroDisponible_SiNoHayNingunLibroDisponibleEnElCatalogo" classname="biblioteca.BibliotecaTest" time="0.002"/>
+  <testcase name="unEjemplarFiguraDisponible_SiSeFinalizaSuPrestamo" classname="biblioteca.BibliotecaTest" time="0.002"/>
 </testsuite>

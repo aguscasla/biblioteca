@@ -142,10 +142,6 @@ public class Biblioteca {
 
         LocalDate hoy = LocalDate.now(reloj);
 
-        if(prestamo.getEstado() == Prestamo.Estado.FINALIZADO){
-            throw new PrestamoFinalizadoException("El prestamo debe estar en curso.");
-        }
-
         if(prestamo.estaVencido(hoy)){
             throw new PrestamoVencidoException("El prestamo se encuentra vencido.");
         }
@@ -251,10 +247,6 @@ public class Biblioteca {
 
     public Map<String, Usuario> getSocios() {
         return socios;
-    }
-
-    public Catalogo getCatalogo() {
-        return catalogo;
     }
 
     public ArrayList<Prestamo> getPrestamos() {

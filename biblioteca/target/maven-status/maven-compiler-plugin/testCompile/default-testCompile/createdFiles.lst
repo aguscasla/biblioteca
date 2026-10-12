@@ -1,4 +1,5 @@
 biblioteca\BibliotecaTest.class
+biblioteca\CatalogoTest.class
 prestamos\PrestamoTest.class
 usuarios\UsuarioTest.class
 libros\LibroTest.class
