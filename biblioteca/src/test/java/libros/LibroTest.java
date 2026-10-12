@@ -145,4 +145,12 @@ public class LibroTest {
         assertThrows(NullPointerException.class, act);
     }
 
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnIDNulo(){
+        Executable act = () -> new Libro(null, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+            340, Libro.Idioma.CASTELLANO);
+
+        assertThrows(NullPointerException.class, act);
+    }
+
 }

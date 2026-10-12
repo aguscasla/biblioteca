@@ -68,7 +68,7 @@ public class Libro {
         this.fechaDePublicacion = Objects.requireNonNull(fechaDePublicacion, "La fecha de publicacion es obligatoria");
         this.cantidadDePaginas = Objects.requireNonNull(cantidadDePaginas, "La cantidad de paginas es obligatoria");
         this.idioma = Objects.requireNonNull(idioma, "El idioma es obligatorio");
-        this.id = id;
+        this.id = Objects.requireNonNull(id, "El id es obligatorio");
 
         if(cantidadDePaginas <= 0){
             throw new IllegalArgumentException("La cantidad de paginas es invalida");
