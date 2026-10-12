@@ -25,7 +25,7 @@ public class PrestamoTest {
 
     @BeforeEach 
     void setUp(){
-        ejemplar = new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, 
+        ejemplar = new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, 
             LocalDate.of(2014, 1, 1), 340, 
             Libro.Idioma.CASTELLANO);
 

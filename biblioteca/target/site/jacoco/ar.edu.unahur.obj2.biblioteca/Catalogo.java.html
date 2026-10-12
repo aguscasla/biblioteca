@@ -18,8 +18,8 @@ import ar.edu.unahur.obj2.libros.Libro;
 <span class="fc" id="L18">            throw new IllegalArgumentException(&quot;El libro es invalido&quot;);</span>
         }
 
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if(catalogo.containsKey(libro.getId())){</span>
-<span class="nc" id="L22">            throw new LibroYaRegistradoException();</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if(catalogo.containsKey(libro.getId())){</span>
+<span class="fc" id="L22">            throw new LibroYaRegistradoException();</span>
         }
 
 <span class="fc" id="L25">        catalogo.put(libro.getId(), libro);</span>

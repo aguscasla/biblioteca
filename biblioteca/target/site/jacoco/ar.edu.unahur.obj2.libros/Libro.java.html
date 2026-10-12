@@ -8,142 +8,144 @@ import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 
 public class Libro {
 
-<span class="fc" id="L11">    private static Integer siguienteId = 1;</span>
-
     private String titulo;
     private String autor;
     private Categoria categoria;
     private LocalDate fechaDePublicacion;
     private Estado estado;
-<span class="fc" id="L18">    private Integer id = 0;</span>
+    private Integer id;
     private Integer cantidadDePaginas;
     private Idioma idioma;
 
-<span class="fc" id="L22">    public enum Estado {</span>
-<span class="fc" id="L23">        DISPONIBLE,</span>
-<span class="fc" id="L24">        PRESTADO,</span>
-<span class="fc" id="L25">        EN_REPARACION,</span>
-<span class="fc" id="L26">        INHABILITADO</span>
+<span class="fc" id="L20">    public enum Estado {</span>
+<span class="fc" id="L21">        DISPONIBLE,</span>
+<span class="fc" id="L22">        PRESTADO,</span>
+<span class="fc" id="L23">        EN_REPARACION,</span>
+<span class="fc" id="L24">        INHABILITADO</span>
     }
 
-<span class="fc" id="L29">    public enum Idioma {</span>
-<span class="fc" id="L30">        INGLES,</span>
-<span class="fc" id="L31">        CASTELLANO,</span>
-<span class="fc" id="L32">        PORTUGUES,</span>
-<span class="fc" id="L33">        ITALIANO,</span>
-<span class="fc" id="L34">        FRANCES</span>
+<span class="fc" id="L27">    public enum Idioma {</span>
+<span class="fc" id="L28">        INGLES,</span>
+<span class="fc" id="L29">        CASTELLANO,</span>
+<span class="fc" id="L30">        PORTUGUES,</span>
+<span class="fc" id="L31">        ITALIANO,</span>
+<span class="fc" id="L32">        FRANCES</span>
     }
 
-<span class="fc" id="L37">    public enum Categoria {</span>
-<span class="fc" id="L38">        ACADEMICO,</span>
-<span class="fc" id="L39">        ARTE_Y_DISENO,</span>
-<span class="fc" id="L40">        AUTOAYUDA,</span>
-<span class="fc" id="L41">        BIOGRAFIA,</span>
-<span class="fc" id="L42">        CIENCIA,</span>
-<span class="fc" id="L43">        CIENCIA_FICCION,</span>
-<span class="fc" id="L44">        COMIC_Y_MANGA,</span>
-<span class="fc" id="L45">        DESARROLLO_PERSONAL,</span>
-<span class="fc" id="L46">        ECONOMIA_Y_NEGOCIOS,</span>
-<span class="fc" id="L47">        ENSAYO,</span>
-<span class="fc" id="L48">        FANTASIA,</span>
-<span class="fc" id="L49">        FILOSOFIA,</span>
-<span class="fc" id="L50">        GASTRONOMIA,</span>
-<span class="fc" id="L51">        HISTORIA,</span>
-<span class="fc" id="L52">        INFANTIL_Y_JUVENIL,</span>
-<span class="fc" id="L53">        INFORMATICA_Y_TECNOLOGIA,</span>
-<span class="fc" id="L54">        LITERATURA,</span>
-<span class="fc" id="L55">        MANUALES_Y_TECNICOS,</span>
-<span class="fc" id="L56">        MISTERIO_Y_POLICIAL,</span>
-<span class="fc" id="L57">        NOVELA_HISTORICA,</span>
-<span class="fc" id="L58">        POESIA_Y_TEATRO,</span>
-<span class="fc" id="L59">        ROMANCE,</span>
-<span class="fc" id="L60">        SALUD_Y_BIENESTAR,</span>
-<span class="fc" id="L61">        TERROR</span>
+<span class="fc" id="L35">    public enum Categoria {</span>
+<span class="fc" id="L36">        ACADEMICO,</span>
+<span class="fc" id="L37">        ARTE_Y_DISENO,</span>
+<span class="fc" id="L38">        AUTOAYUDA,</span>
+<span class="fc" id="L39">        BIOGRAFIA,</span>
+<span class="fc" id="L40">        CIENCIA,</span>
+<span class="fc" id="L41">        CIENCIA_FICCION,</span>
+<span class="fc" id="L42">        COMIC_Y_MANGA,</span>
+<span class="fc" id="L43">        DESARROLLO_PERSONAL,</span>
+<span class="fc" id="L44">        ECONOMIA_Y_NEGOCIOS,</span>
+<span class="fc" id="L45">        ENSAYO,</span>
+<span class="fc" id="L46">        FANTASIA,</span>
+<span class="fc" id="L47">        FILOSOFIA,</span>
+<span class="fc" id="L48">        GASTRONOMIA,</span>
+<span class="fc" id="L49">        HISTORIA,</span>
+<span class="fc" id="L50">        INFANTIL_Y_JUVENIL,</span>
+<span class="fc" id="L51">        INFORMATICA_Y_TECNOLOGIA,</span>
+<span class="fc" id="L52">        LITERATURA,</span>
+<span class="fc" id="L53">        MANUALES_Y_TECNICOS,</span>
+<span class="fc" id="L54">        MISTERIO_Y_POLICIAL,</span>
+<span class="fc" id="L55">        NOVELA_HISTORICA,</span>
+<span class="fc" id="L56">        POESIA_Y_TEATRO,</span>
+<span class="fc" id="L57">        ROMANCE,</span>
+<span class="fc" id="L58">        SALUD_Y_BIENESTAR,</span>
+<span class="fc" id="L59">        TERROR</span>
     }
 
-    public Libro(String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
-<span class="fc" id="L65">            Integer cantidadDePaginas, Idioma idioma) {</span>
+    public Libro(Integer id, String titulo, String autor, Categoria categoria, LocalDate fechaDePublicacion,
+<span class="fc" id="L63">            Integer cantidadDePaginas, Idioma idioma) {</span>
                 
-<span class="fc" id="L67">        this.titulo = Objects.requireNonNull(titulo, &quot;El titulo es obligatorio&quot;);</span>
-<span class="fc" id="L68">        this.autor = Objects.requireNonNull(autor, &quot;El autor es obligatorio&quot;);</span>
-<span class="fc" id="L69">        this.categoria = Objects.requireNonNull(categoria, &quot;La categoria es obligatoria&quot;);</span>
-<span class="fc" id="L70">        this.fechaDePublicacion = Objects.requireNonNull(fechaDePublicacion, &quot;La fecha de publicacion es obligatoria&quot;);</span>
-<span class="fc" id="L71">        this.cantidadDePaginas = Objects.requireNonNull(cantidadDePaginas, &quot;La cantidad de paginas es obligatoria&quot;);</span>
-<span class="fc" id="L72">        this.idioma = Objects.requireNonNull(idioma, &quot;El idioma es obligatorio&quot;);</span>
+<span class="fc" id="L65">        this.titulo = Objects.requireNonNull(titulo, &quot;El titulo es obligatorio&quot;);</span>
+<span class="fc" id="L66">        this.autor = Objects.requireNonNull(autor, &quot;El autor es obligatorio&quot;);</span>
+<span class="fc" id="L67">        this.categoria = Objects.requireNonNull(categoria, &quot;La categoria es obligatoria&quot;);</span>
+<span class="fc" id="L68">        this.fechaDePublicacion = Objects.requireNonNull(fechaDePublicacion, &quot;La fecha de publicacion es obligatoria&quot;);</span>
+<span class="fc" id="L69">        this.cantidadDePaginas = Objects.requireNonNull(cantidadDePaginas, &quot;La cantidad de paginas es obligatoria&quot;);</span>
+<span class="fc" id="L70">        this.idioma = Objects.requireNonNull(idioma, &quot;El idioma es obligatorio&quot;);</span>
+<span class="fc" id="L71">        this.id = id;</span>
 
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        if(cantidadDePaginas &lt;= 0){</span>
-<span class="fc" id="L75">            throw new IllegalArgumentException(&quot;La cantidad de paginas es invalida&quot;);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if(cantidadDePaginas &lt;= 0){</span>
+<span class="fc" id="L74">            throw new IllegalArgumentException(&quot;La cantidad de paginas es invalida&quot;);</span>
         }
 
-<span class="fc" id="L78">        this.estado = Estado.DISPONIBLE;</span>
-<span class="fc" id="L79">        this.id = siguienteId++;</span>
-<span class="fc" id="L80">    }</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if(id &lt;= 0){</span>
+<span class="nc" id="L78">            throw new IllegalArgumentException(&quot;El id no puede ser igual o menor a cero&quot;);</span>
+        }
+
+<span class="fc" id="L81">        this.estado = Estado.DISPONIBLE;</span>
+<span class="fc" id="L82">    }</span>
 
     public void habilitar(){
-<span class="fc bfc" id="L83" title="All 2 branches covered.">        if(estado == Estado.INHABILITADO){</span>
-<span class="fc" id="L84">            throw new LibroInhabilitadoException(&quot;El libro se encuentra inhabilitado&quot;);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if(estado == Estado.INHABILITADO){</span>
+<span class="fc" id="L86">            throw new LibroInhabilitadoException(&quot;El libro se encuentra inhabilitado&quot;);</span>
         }
 
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if(estado != Estado.DISPONIBLE){</span>
-<span class="fc" id="L88">            estado = Estado.DISPONIBLE;</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if(estado != Estado.DISPONIBLE){</span>
+<span class="fc" id="L90">            estado = Estado.DISPONIBLE;</span>
         }
         
-<span class="fc" id="L91">    }</span>
+<span class="fc" id="L93">    }</span>
 
     public void prestar(){
-<span class="fc bfc" id="L94" title="All 2 branches covered.">        if(estado != Estado.DISPONIBLE){</span>
-<span class="fc" id="L95">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if(estado != Estado.DISPONIBLE){</span>
+<span class="fc" id="L97">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
         }
 
-<span class="fc" id="L98">        this.estado = Estado.PRESTADO;</span>
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L100">        this.estado = Estado.PRESTADO;</span>
+<span class="fc" id="L101">    }</span>
 
     public void reparar(){
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        if(estado != Estado.DISPONIBLE){</span>
-<span class="fc" id="L103">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if(estado != Estado.DISPONIBLE){</span>
+<span class="fc" id="L105">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
         }
 
-<span class="fc" id="L106">        this.estado = Estado.EN_REPARACION;</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L108">        this.estado = Estado.EN_REPARACION;</span>
+<span class="fc" id="L109">    }</span>
 
     public void inhabilitar(){
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        if(estado == Estado.INHABILITADO){</span>
-<span class="fc" id="L111">            throw new LibroInhabilitadoException(&quot;El libro se encuentra inhabilitado&quot;);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if(estado == Estado.INHABILITADO){</span>
+<span class="fc" id="L113">            throw new LibroInhabilitadoException(&quot;El libro se encuentra inhabilitado&quot;);</span>
         }
 
-<span class="fc" id="L114">        this.estado = Estado.INHABILITADO;</span>
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L116">        this.estado = Estado.INHABILITADO;</span>
+<span class="fc" id="L117">    }</span>
 
     public Estado getEstado(){
-<span class="fc" id="L118">        return estado;</span>
+<span class="fc" id="L120">        return estado;</span>
     }
 
     public Integer getId(){
-<span class="fc" id="L122">        return id;</span>
+<span class="fc" id="L124">        return id;</span>
     }
 
     public String getTitulo() {
-<span class="fc" id="L126">        return titulo;</span>
+<span class="fc" id="L128">        return titulo;</span>
     }
 
     public String getAutor() {
-<span class="nc" id="L130">        return autor;</span>
+<span class="nc" id="L132">        return autor;</span>
     }
 
     public Categoria getCategoria() {
-<span class="nc" id="L134">        return categoria;</span>
+<span class="nc" id="L136">        return categoria;</span>
     }
 
     public LocalDate getFechaDePublicacion() {
-<span class="nc" id="L138">        return fechaDePublicacion;</span>
+<span class="nc" id="L140">        return fechaDePublicacion;</span>
     }
 
     public Integer getCantidadDePaginas() {
-<span class="nc" id="L142">        return cantidadDePaginas;</span>
+<span class="nc" id="L144">        return cantidadDePaginas;</span>
     }
 
     public Idioma getIdioma() {
-<span class="nc" id="L146">        return idioma;</span>
+<span class="nc" id="L148">        return idioma;</span>
     } 
 
 }

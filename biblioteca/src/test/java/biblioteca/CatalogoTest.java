@@ -13,6 +13,7 @@ import org.junit.jupiter.api.function.Executable;
 import ar.edu.unahur.obj2.biblioteca.Catalogo;
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
+import ar.edu.unahur.obj2.exceptions.LibroYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
 
 public class CatalogoTest {
@@ -23,7 +24,7 @@ public class CatalogoTest {
     @BeforeEach 
     void setUp(){
         catalogo = new Catalogo();
-        libro = new Libro("El Principito", "Antonie de Saint-Exupery", Libro.Categoria.FANTASIA, 
+        libro = new Libro(1, "El Principito", "Antonie de Saint-Exupery", Libro.Categoria.FANTASIA, 
             LocalDate.of(1943, 4, 1),
             47, Libro.Idioma.FRANCES);
 
@@ -32,12 +33,12 @@ public class CatalogoTest {
 
     @Test 
     void deberiaAgregarUnLibro(){
-        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+        Libro libro2 = new Libro(2, "Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
             LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES); 
 
         catalogo.agregarLibro(libro2);
 
-        assertEquals(libro2, catalogo.obtenerLibro(libro2.getId()));
+        assertEquals(libro2, catalogo.obtenerLibro(2));
     }
 
     @Test 
@@ -49,28 +50,28 @@ public class CatalogoTest {
 
     @Test 
     void deberiaEliminarUnLibro(){
-        catalogo.eliminarLibro(libro.getId());
+        catalogo.eliminarLibro(1);
 
-        Executable act = () -> catalogo.obtenerLibro(libro.getId());
+        Executable act = () -> catalogo.obtenerLibro(1);
 
         assertThrows(LibroNoRegistradoException.class, act);
     }
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeEliminaUnLibroQueNoEstaEnElCatalogo(){
-        Executable act = () -> catalogo.eliminarLibro(0);
+        Executable act = () -> catalogo.eliminarLibro(99);
 
         assertThrows(LibroNoRegistradoException.class, act);
     }
 
     @Test 
     void deberiaObtenerUnLibro(){
-        assertEquals(libro, catalogo.obtenerLibro(libro.getId()));
+        assertEquals(libro, catalogo.obtenerLibro(1));
     }
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiQuiereObtenerUnLibroQueNoEstaEnElCatalogo(){
-        Executable act = () -> catalogo.obtenerLibro(0);
+        Executable act = () -> catalogo.obtenerLibro(99);
 
         assertThrowsExactly(LibroNoRegistradoException.class, act);
     }
@@ -94,6 +95,13 @@ public class CatalogoTest {
         Executable act = () -> catalogo.obtenerLibroDisponible("Harry Potter");
 
         assertThrows(LibroNoDisponibleException.class, act);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcion_SiSeAgregaUnLibroConIDQueYaSeEncuentraEnElCatalogo(){
+        Executable act = () -> catalogo.agregarLibro(libro);
+
+        assertThrows(LibroYaRegistradoException.class, act);
     }
 
 }

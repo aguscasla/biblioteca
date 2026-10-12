@@ -19,14 +19,14 @@ public class LibroTest {
 
     @BeforeEach 
     void setUp(){
-        libro = new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+        libro = new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
             340, Libro.Idioma.CASTELLANO);
 
     }
     
     @Test
     void deberiaEstarDisponibleAlInstanciarlo(){
-        Libro libro = new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+        Libro libro = new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
             340, Libro.Idioma.CASTELLANO);
 
         assertEquals(Libro.Estado.DISPONIBLE, libro.getEstado());
@@ -91,7 +91,7 @@ public class LibroTest {
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnTituloNulo(){
-        Executable act = () -> new Libro(null, "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+        Executable act = () -> new Libro(1, null, "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
             340, Libro.Idioma.CASTELLANO);
 
         assertThrows(NullPointerException.class, act);
@@ -99,7 +99,7 @@ public class LibroTest {
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnAutorNulo(){
-        Executable act = () -> new Libro("Clean Code", null, Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+        Executable act = () -> new Libro(1, "Clean Code", null, Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
             340, Libro.Idioma.CASTELLANO);
 
         assertThrows(NullPointerException.class, act);
@@ -107,7 +107,7 @@ public class LibroTest {
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaCategoriaNula(){
-        Executable act = () -> new Libro("Clean Code", "Robert C. Martin", null, LocalDate.of(2014, 1, 1), 
+        Executable act = () -> new Libro(1, "Clean Code", "Robert C. Martin", null, LocalDate.of(2014, 1, 1), 
             340, Libro.Idioma.CASTELLANO);
 
         assertThrows(NullPointerException.class, act);
@@ -115,7 +115,7 @@ public class LibroTest {
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaFechaDePublicacionNula(){
-        Executable act = () -> new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, null, 
+        Executable act = () -> new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, null, 
             340, Libro.Idioma.CASTELLANO);
 
         assertThrows(NullPointerException.class, act);
@@ -123,7 +123,7 @@ public class LibroTest {
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaCantidadDePaginasNula(){
-        Executable act = () -> new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+        Executable act = () -> new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
             null, Libro.Idioma.CASTELLANO);
 
         assertThrows(NullPointerException.class, act);
@@ -131,7 +131,7 @@ public class LibroTest {
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnaCantidadDePaginasInvalida(){
-        Executable act = () -> new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+        Executable act = () -> new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
             0, Libro.Idioma.CASTELLANO);
 
         assertThrows(IllegalArgumentException.class, act);
@@ -139,7 +139,7 @@ public class LibroTest {
 
     @Test 
     void deberiaLanzarUnaExcepcion_SiSeInstanciaConUnIdiomaNulo(){
-        Executable act = () -> new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
+        Executable act = () -> new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, LocalDate.of(2014, 1, 1), 
             340, null);
 
         assertThrows(NullPointerException.class, act);

@@ -15,10 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import ar.edu.unahur.obj2.biblioteca.Biblioteca;
-import ar.edu.unahur.obj2.exceptions.LibroInexistenteException;
 import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
-import ar.edu.unahur.obj2.exceptions.PrestamoFinalizadoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoEncontradoException;
 import ar.edu.unahur.obj2.exceptions.PrestamoNoRenovableException;
 import ar.edu.unahur.obj2.exceptions.PrestamoSinRenovacionesDisponiblesException;
@@ -53,7 +51,7 @@ public class BibliotecaTest {
         
         biblioteca = new Biblioteca(relojFijo);
 
-        libro = new Libro("Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, 
+        libro = new Libro(1, "Clean Code", "Robert C. Martin", Libro.Categoria.ACADEMICO, 
             LocalDate.of(2008, 8, 1), 
             644, Libro.Idioma.INGLES);
 
@@ -159,7 +157,7 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 25), 0);
 
-        biblioteca.finalizarPrestamo(libro.getId());
+        biblioteca.finalizarPrestamo(1);
 
         assertFalse(biblioteca.estaInfringiendoLasNormas(usuario));
     }
@@ -170,17 +168,17 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 24), 0);
 
-        biblioteca.finalizarPrestamo(libro.getId());
+        biblioteca.finalizarPrestamo(1);
 
         biblioteca.otorgarPrestamo(2, "46787883", "Clean Code", LocalDate.of(2026, 9, 5), 
             LocalDate.of(2026, 9, 23), 0);
 
-        biblioteca.finalizarPrestamo(libro.getId());
+        biblioteca.finalizarPrestamo(1);
 
         biblioteca.otorgarPrestamo(3, "46787883", "Clean Code", LocalDate.of(2026, 9, 8), 
             LocalDate.of(2026, 9, 28), 0);
 
-        biblioteca.finalizarPrestamo(libro.getId());
+        biblioteca.finalizarPrestamo(1);
 
         assertTrue(biblioteca.estaInfringiendoLasNormas(usuario));
     }
@@ -217,7 +215,7 @@ public class BibliotecaTest {
             LocalDate.of(2026, 10, 25), 2);
 
         Prestamo prestamo = biblioteca.obtenerPrestamo(libro);
-        biblioteca.finalizarPrestamo(libro.getId());
+        biblioteca.finalizarPrestamo(1);
 
         assertEquals(Prestamo.Estado.FINALIZADO, prestamo.getEstado());
     }
@@ -229,7 +227,7 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2);
 
-        biblioteca.finalizarPrestamo(libro.getId());
+        biblioteca.finalizarPrestamo(1);
 
         assertEquals(Libro.Estado.DISPONIBLE, libro.getEstado());
     }
@@ -265,7 +263,7 @@ public class BibliotecaTest {
 
     @Test 
     void noDeberiaOtorgarUnPrestamo_SiElUsuarioAlcanzoSuLimiteDePrestamos(){
-        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+        Libro libro2 = new Libro(2, "Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
             LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES);
 
         biblioteca.agregarLibroAlCatalogo(libro2);
@@ -281,7 +279,7 @@ public class BibliotecaTest {
 
     @Test 
     void noDeberiaOtorgarUnPrestamo_SiElUsuarioInfringeLasNormas(){
-        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+        Libro libro2 = new Libro(2, "Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
             LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES);
 
         biblioteca.agregarLibroAlCatalogo(libro2);
@@ -302,7 +300,7 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 9, 30), 3);
 
-        biblioteca.renovarPrestamo(libro.getId());
+        biblioteca.renovarPrestamo(1);
         Prestamo prestamo = biblioteca.obtenerPrestamo(libro);
 
         assertEquals(2, prestamo.getCantidadDeRenovaciones());
@@ -315,7 +313,7 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 9, 30), 3);
 
-        biblioteca.renovarPrestamo(libro.getId());
+        biblioteca.renovarPrestamo(1);
         Prestamo prestamo = biblioteca.obtenerPrestamo(libro);
 
         assertEquals(LocalDate.of(2026, 10, 7), prestamo.getFechaLimite());
@@ -335,7 +333,7 @@ public class BibliotecaTest {
     void noDeberiaDarDeBajaANingunUsuario_SiNingunoInclumpleLasNormasAlEvaluarlo(){
         Usuario usuario2 = new Usuario("Edu", "Aguero", "12566044", 69, 
             "3755578920", "ed@gmail.com");
-        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+        Libro libro2 = new Libro(2, "Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
             LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES);
 
         biblioteca.agregarLibroAlCatalogo(libro2);
@@ -348,8 +346,8 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(2, "12566044", "Harry Potter", LocalDate.of(2026, 9, 1), 
         LocalDate.of(2026, 9, 25), 0);
 
-        biblioteca.finalizarPrestamo(libro.getId());
-        biblioteca.finalizarPrestamo(libro2.getId());
+        biblioteca.finalizarPrestamo(1);
+        biblioteca.finalizarPrestamo(2);
 
         biblioteca.evaluarUsuarios();
         
@@ -363,7 +361,7 @@ public class BibliotecaTest {
     void deberiaInhabilitarAUnUsuario_SiEsteNoCumpleLasNormasAlEvaluarlo(){
         Usuario usuario2 = new Usuario("Edu", "Aguero", "12566044", 69, 
             "3755578920", "ed@gmail.com");
-        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+        Libro libro2 = new Libro(2, "Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
             LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES);
 
         biblioteca.agregarLibroAlCatalogo(libro2);
@@ -376,7 +374,7 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(2, "12566044", "Harry Potter", LocalDate.of(2026, 9, 1), 
         LocalDate.of(2026, 9, 25), 0);
 
-        biblioteca.finalizarPrestamo(libro2.getId());
+        biblioteca.finalizarPrestamo(2);
 
         biblioteca.evaluarUsuarios();
 
@@ -390,9 +388,9 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 10, 5), 2);
 
-        biblioteca.finalizarPrestamo(libro.getId());
+        biblioteca.finalizarPrestamo(1);
 
-        assertThrows(PrestamoNoEncontradoException.class, () -> biblioteca.renovarPrestamo(libro.getId()));
+        assertThrows(PrestamoNoEncontradoException.class, () -> biblioteca.renovarPrestamo(1));
     }
 
     @Test 
@@ -402,7 +400,7 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 9, 28), 2);
 
-        assertThrows(PrestamoVencidoException.class, () -> biblioteca.renovarPrestamo(libro.getId()));
+        assertThrows(PrestamoVencidoException.class, () -> biblioteca.renovarPrestamo(1));
     }
 
     @Test 
@@ -412,7 +410,7 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 10, 3), 2);
 
-        assertThrows(PrestamoNoRenovableException.class, () -> biblioteca.renovarPrestamo(libro.getId()));
+        assertThrows(PrestamoNoRenovableException.class, () -> biblioteca.renovarPrestamo(1));
     }
 
     @Test 
@@ -422,26 +420,26 @@ public class BibliotecaTest {
         biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 9, 30), 0);
 
-        assertThrows(PrestamoSinRenovacionesDisponiblesException.class, () -> biblioteca.renovarPrestamo(libro.getId()));
+        assertThrows(PrestamoSinRenovacionesDisponiblesException.class, () -> biblioteca.renovarPrestamo(1));
     }
 
     @Test 
     void deberiaLanzarUnaExcepcionAlBuscarUnLibroDelCatalogo_SiSeEliminaElLibroDelCatalogo(){
-        biblioteca.eliminarLibroDelCatalogo(libro.getId());
+        biblioteca.eliminarLibroDelCatalogo(1);
 
-        Executable act = () -> biblioteca.obtenerLibroDelCatalogo(libro.getId());
+        Executable act = () -> biblioteca.obtenerLibroDelCatalogo(1);
 
         assertThrows(LibroNoRegistradoException.class, act);
     }
 
     @Test 
     void deberiaPoderAgregarUnLibroAlCatalogo(){
-        Libro libro2 = new Libro("Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
+        Libro libro2 = new Libro(2, "Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
             LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES); 
 
         biblioteca.agregarLibroAlCatalogo(libro2);
 
-        assertEquals(libro2, biblioteca.obtenerLibroDelCatalogo(libro2.getId()));
+        assertEquals(libro2, biblioteca.obtenerLibroDelCatalogo(2));
     }
 
     @Test 
