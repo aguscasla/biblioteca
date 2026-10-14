@@ -144,7 +144,7 @@ public class BibliotecaTest {
     @Test 
     void unUsuarioInfringeLasNormas_SiNoHaDevueltoUnEjemplarLuegoDeUnaSemanaDeSuFechaLimite(){
         biblioteca.asociarUsuario(usuario, 3);
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 20), 0);
 
         assertTrue(biblioteca.estaInfringiendoLasNormas(usuario));
@@ -154,7 +154,7 @@ public class BibliotecaTest {
     void unUsuarioNoInfringeLasNormas_SiDevuelveSusPrestamosATiempoYNoConservaNingunLibro(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 25), 0);
 
         biblioteca.finalizarPrestamo(1);
@@ -165,17 +165,17 @@ public class BibliotecaTest {
     @Test 
     void unUsuarioInfringeLasNormas_SiDevolvioUnEjemplarVencidoEnVariasOcasiones(){
         biblioteca.asociarUsuario(usuario, 3);
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 24), 0);
 
         biblioteca.finalizarPrestamo(1);
 
-        biblioteca.otorgarPrestamo(2, "46787883", "Clean Code", LocalDate.of(2026, 9, 5), 
+        biblioteca.otorgarPrestamo(2, "46787883", 1, LocalDate.of(2026, 9, 5), 
             LocalDate.of(2026, 9, 23), 0);
 
         biblioteca.finalizarPrestamo(1);
 
-        biblioteca.otorgarPrestamo(3, "46787883", "Clean Code", LocalDate.of(2026, 9, 8), 
+        biblioteca.otorgarPrestamo(3, "46787883", 1, LocalDate.of(2026, 9, 8), 
             LocalDate.of(2026, 9, 28), 0);
 
         biblioteca.finalizarPrestamo(1);
@@ -187,7 +187,7 @@ public class BibliotecaTest {
     void deberiaOtorgarUnPrestamoAUnUsuarioRegistrado(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 20), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 20), 
             LocalDate.of(2026, 9, 30), 2);
         
         Prestamo prestamo = biblioteca.obtenerPrestamo(libro);
@@ -199,7 +199,7 @@ public class BibliotecaTest {
     void unPrestamoDeberiaEstarEnCurso_SiSeOtorgaAUnUsuario(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 20), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 20), 
             LocalDate.of(2026, 10, 30), 2);
 
         Prestamo prestamo = biblioteca.obtenerPrestamo(libro);
@@ -211,7 +211,7 @@ public class BibliotecaTest {
     void deberiaFinalizarseUnPrestamo(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2);
 
         Prestamo prestamo = biblioteca.obtenerPrestamo(libro);
@@ -224,7 +224,7 @@ public class BibliotecaTest {
     void unEjemplarFiguraDisponible_SiSeFinalizaSuPrestamo(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2);
 
         biblioteca.finalizarPrestamo(1);
@@ -238,7 +238,7 @@ public class BibliotecaTest {
         libro.reparar();
 
         assertThrows(LibroNoDisponibleException.class, () -> 
-            biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
+            biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2));
     }
 
@@ -257,7 +257,7 @@ public class BibliotecaTest {
         biblioteca.desasociarUsuario("46787883");
 
         assertThrows(UsuarioInactivoException.class, () -> 
-            biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
+            biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2));
     }
 
@@ -269,11 +269,11 @@ public class BibliotecaTest {
         biblioteca.agregarLibroAlCatalogo(libro2);
         biblioteca.asociarUsuario(usuario, 1);
 
-        biblioteca.otorgarPrestamo(2, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
+        biblioteca.otorgarPrestamo(2, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2);
 
         assertThrows(UsuarioSinPrestamosDisponiblesException.class, () -> 
-            biblioteca.otorgarPrestamo(1, "46787883", "Harry Potter", LocalDate.of(2026, 9, 10), 
+            biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 2));       
     }
 
@@ -285,11 +285,11 @@ public class BibliotecaTest {
         biblioteca.agregarLibroAlCatalogo(libro2);
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 20), 0);
 
         assertThrows(UsuarioInhabilitadoException.class, () -> 
-            biblioteca.otorgarPrestamo(1, "46787883", "Harry Potter", LocalDate.of(2026, 9, 10), 
+            biblioteca.otorgarPrestamo(1, "46787883", 2, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 10, 25), 0));
     }
 
@@ -297,7 +297,7 @@ public class BibliotecaTest {
     void deberiaDescontarUnaRenovacionDeUnPrestamo(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 9, 30), 3);
 
         biblioteca.renovarPrestamo(1);
@@ -310,7 +310,7 @@ public class BibliotecaTest {
     void deberiaAlargarUnaSemanaLaFechaLimiteAlRenovarElPrestamo(){
         biblioteca.asociarUsuario(usuario, 3);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 10), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 10), 
             LocalDate.of(2026, 9, 30), 3);
 
         biblioteca.renovarPrestamo(1);
@@ -340,10 +340,10 @@ public class BibliotecaTest {
         biblioteca.asociarUsuario(usuario, 2);
         biblioteca.asociarUsuario(usuario2, 2);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 1), 
         LocalDate.of(2026, 9, 25), 0);
 
-        biblioteca.otorgarPrestamo(2, "12566044", "Harry Potter", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(2, "12566044", 2, LocalDate.of(2026, 9, 1), 
         LocalDate.of(2026, 9, 25), 0);
 
         biblioteca.finalizarPrestamo(1);
@@ -368,10 +368,10 @@ public class BibliotecaTest {
         biblioteca.asociarUsuario(usuario, 2);
         biblioteca.asociarUsuario(usuario2, 2);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 1), 
             LocalDate.of(2026, 9, 20), 0);
 
-        biblioteca.otorgarPrestamo(2, "12566044", "Harry Potter", LocalDate.of(2026, 9, 1), 
+        biblioteca.otorgarPrestamo(2, "12566044", 2, LocalDate.of(2026, 9, 1), 
         LocalDate.of(2026, 9, 25), 0);
 
         biblioteca.finalizarPrestamo(2);
@@ -385,7 +385,7 @@ public class BibliotecaTest {
     void noDeberiaRenovarUnPrestamo_SiNoSeEncuentraEnCurso(){
         biblioteca.asociarUsuario(usuario, 2);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 10, 5), 2);
 
         biblioteca.finalizarPrestamo(1);
@@ -397,7 +397,7 @@ public class BibliotecaTest {
     void noDeberiaRenovarUnPrestamo_SiEsteSeEncuentraVencido(){
         biblioteca.asociarUsuario(usuario, 2);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 9, 28), 2);
 
         assertThrows(PrestamoVencidoException.class, () -> biblioteca.renovarPrestamo(1));
@@ -407,7 +407,7 @@ public class BibliotecaTest {
     void noDeberiaRenovarUnPrestamo_SiLaFechaActualEstaAMasDeDosDiasDeLaFechaLimite(){
         biblioteca.asociarUsuario(usuario, 2);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 10, 3), 2);
 
         assertThrows(PrestamoNoRenovableException.class, () -> biblioteca.renovarPrestamo(1));
@@ -417,19 +417,10 @@ public class BibliotecaTest {
     void noDeberiaRenovarUnPrestamo_SiAlcanzoLaCantidadDeRenovacionesDisponibles(){
         biblioteca.asociarUsuario(usuario, 2);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", LocalDate.of(2026, 9, 15),
+        biblioteca.otorgarPrestamo(1, "46787883", 1, LocalDate.of(2026, 9, 15),
             LocalDate.of(2026, 9, 30), 0);
 
         assertThrows(PrestamoSinRenovacionesDisponiblesException.class, () -> biblioteca.renovarPrestamo(1));
-    }
-
-    @Test 
-    void deberiaLanzarUnaExcepcionAlBuscarUnLibroDelCatalogo_SiSeEliminaElLibroDelCatalogo(){
-        biblioteca.eliminarLibroDelCatalogo(1);
-
-        Executable act = () -> biblioteca.obtenerLibroDelCatalogo(1);
-
-        assertThrows(LibroNoRegistradoException.class, act);
     }
 
     @Test 
@@ -439,35 +430,27 @@ public class BibliotecaTest {
 
         biblioteca.agregarLibroAlCatalogo(libro2);
 
-        assertEquals(libro2, biblioteca.obtenerLibroDelCatalogo(2));
-    }
-
-    @Test 
-    void deberiaPoderObtenerDelCatalogoUnLibroQueEstaDisponible(){
-        assertEquals(libro, biblioteca.obtenerLibroDisponible("Clean Code"));
-    }
-
-    @Test 
-    void deberiaLanzarUnaExcepcionAlBuscarUnLibroDisponible_SiNoHayNingunLibroDisponibleEnElCatalogo(){
-        biblioteca.asociarUsuario(usuario, 2);
-
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", 
-            LocalDate.of(2026, 9, 10), LocalDate.of(2026, 10, 1), 2);
-
-        Executable act = () -> biblioteca.obtenerLibroDisponible("Clean Code");
-
-        assertThrows(LibroNoDisponibleException.class, act);
+        assertEquals(libro2, biblioteca.obtenerLibro(2));
     }
 
     @Test 
     void deberiaLanzarUnaExepcionAlEliminarUnLibro_SiElLibroSeEncuentraPrestado(){
         biblioteca.asociarUsuario(usuario, 2);
 
-        biblioteca.otorgarPrestamo(1, "46787883", "Clean Code", 
+        biblioteca.otorgarPrestamo(1, "46787883", 1, 
             LocalDate.of(2026, 9, 10), LocalDate.of(2026, 10, 1), 2);
 
         Executable act = () -> biblioteca.eliminarLibroDelCatalogo(1);
 
         assertThrows(LibroNoDisponibleException.class, act);
+    }
+
+    @Test 
+    void deberiaEliminarUnLibroDelCatalogo(){
+        biblioteca.eliminarLibroDelCatalogo(1);
+
+        Executable act = () -> biblioteca.obtenerLibro(1);
+
+        assertThrows(LibroNoRegistradoException.class, act);
     }
 }

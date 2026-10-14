@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
+import ar.edu.unahur.obj2.criteriosDeBusqueda.CriterioDeBusqueda;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
 import ar.edu.unahur.obj2.exceptions.LibroYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
@@ -47,26 +47,10 @@ public class Catalogo {
         return libro;
     }
 
-    public Libro obtenerLibroDisponible(String tituloDelLibro){
-
-        List<Libro> librosDelTitulo = catalogo.values().stream()
-                                        .filter(libro -> libro.getTitulo().equals(tituloDelLibro))
-                                        .toList();
-
-        if(librosDelTitulo.isEmpty()){
-            throw new LibroNoRegistradoException();
-        }
-
-        Libro libroDisponible = librosDelTitulo.stream()
-                                    .filter(libro -> libro.getEstado() == Libro.Estado.DISPONIBLE)
-                                    .findFirst()
-                                    .orElse(null);
-
-        if(libroDisponible == null){
-            throw new LibroNoDisponibleException();
-        }
-
-        return libroDisponible;
+    public List<Libro> librosFiltrados(CriterioDeBusqueda criteriosDeBusqueda){
+        return catalogo.values().stream()
+                .filter(libro -> criteriosDeBusqueda.coincide(libro))
+                .toList();
     }
 
 }

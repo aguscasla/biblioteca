@@ -5,13 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import ar.edu.unahur.obj2.biblioteca.Catalogo;
-import ar.edu.unahur.obj2.exceptions.LibroNoDisponibleException;
+import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorAutor;
+import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorCategoria;
+import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorDisponibilidad;
+import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorIdioma;
+import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorTitulo;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
 import ar.edu.unahur.obj2.exceptions.LibroYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
@@ -19,26 +24,56 @@ import ar.edu.unahur.obj2.libros.Libro;
 public class CatalogoTest {
 
     private Catalogo catalogo;
-    private Libro libro;
+    private Libro elPrincipito;
+    private Libro ficciones;
+    private Libro elAleph;
+    private Libro dune;
+    private Libro cienAniosDeSoledad;
 
     @BeforeEach 
     void setUp(){
         catalogo = new Catalogo();
-        libro = new Libro(1, "El Principito", "Antonie de Saint-Exupery", Libro.Categoria.FANTASIA, 
-            LocalDate.of(1943, 4, 1),
-            47, Libro.Idioma.FRANCES);
 
-        catalogo.agregarLibro(libro);
+        elPrincipito = new Libro(1, "El Principito", "Antoine de Saint-Exupery", 
+            Libro.Categoria.FANTASIA, 
+            LocalDate.of(1943, 4, 1),
+            47, Libro.Idioma.FRANCES); 
+
+        ficciones = new Libro(2, "Ficciones", "Jorge Luis Borges",
+            Libro.Categoria.LITERATURA,
+            LocalDate.of(1944, 1, 1), 174, Libro.Idioma.CASTELLANO);
+
+        elAleph = new Libro(3, "El Aleph", "Jorge Luis Borges",
+            Libro.Categoria.LITERATURA,
+            LocalDate.of(1949, 1, 1), 146, Libro.Idioma.CASTELLANO);
+
+        dune = new Libro(4, "Dune", "Frank Herbert",
+            Libro.Categoria.CIENCIA_FICCION,
+            LocalDate.of(1965, 8, 1), 896, Libro.Idioma.INGLES);
+
+        cienAniosDeSoledad = new Libro(5, "Cien años de soledad", "Gabriel Garcia Marquez",
+            Libro.Categoria.LITERATURA,
+            LocalDate.of(1967, 5, 30), 417, Libro.Idioma.CASTELLANO);
+
+        catalogo.agregarLibro(elPrincipito);
+        catalogo.agregarLibro(ficciones);
+        catalogo.agregarLibro(elAleph);
+        catalogo.agregarLibro(dune);
+        catalogo.agregarLibro(cienAniosDeSoledad);
+
+        dune.prestar();
+
+        cienAniosDeSoledad.reparar();
     }
 
     @Test 
     void deberiaAgregarUnLibro(){
-        Libro libro2 = new Libro(2, "Harry Potter", "J.K. Rolling", Libro.Categoria.FANTASIA, 
-            LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES); 
+        Libro harryPotter = new Libro(6, "Harry Potter", "J.K. Rowling", Libro.Categoria.FANTASIA, 
+            LocalDate.of(1980, 5, 14), 232, Libro.Idioma.INGLES);
 
-        catalogo.agregarLibro(libro2);
+        catalogo.agregarLibro(harryPotter);
 
-        assertEquals(libro2, catalogo.obtenerLibro(2));
+        assertEquals(harryPotter, catalogo.obtenerLibro(6));
     }
 
     @Test 
@@ -66,7 +101,7 @@ public class CatalogoTest {
 
     @Test 
     void deberiaObtenerUnLibro(){
-        assertEquals(libro, catalogo.obtenerLibro(1));
+        assertEquals(elPrincipito, catalogo.obtenerLibro(1));
     }
 
     @Test 
@@ -77,31 +112,57 @@ public class CatalogoTest {
     }
 
     @Test 
-    void deberiaObtenerUnLibroDisponible(){
-        assertEquals(libro, catalogo.obtenerLibroDisponible("El Principito"));
-    }
-
-    @Test 
-    void deberiaLanzarUnaExcepcion_SiNoHayNingunLibroDisponible(){
-        libro.prestar();
-
-        Executable act = () -> catalogo.obtenerLibroDisponible("El Principito");
-
-        assertThrows(LibroNoDisponibleException.class, act);
-    }
-
-    @Test 
-    void deberiaLanzarUnaExcepcion_SiNoHayNingunLibroQueConcidaConElTitulo(){
-        Executable act = () -> catalogo.obtenerLibroDisponible("Harry Potter");
-
-        assertThrows(LibroNoRegistradoException.class, act);
-    }
-
-    @Test 
     void deberiaLanzarUnaExcepcion_SiSeAgregaUnLibroConIDQueYaSeEncuentraEnElCatalogo(){
-        Executable act = () -> catalogo.agregarLibro(libro);
+        Executable act = () -> catalogo.agregarLibro(elPrincipito);
 
         assertThrows(LibroYaRegistradoException.class, act);
+    }
+
+    @Test 
+    void deberiaFiltrarPorTitulo(){
+        Set<Libro> librosEsperados = Set.of(elPrincipito);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(new BusquedaPorTitulo("El Principito")));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test
+    void deberiaFiltrarPorAutor(){
+        Set<Libro> librosEsperados = Set.of(ficciones, elAleph);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(new BusquedaPorAutor("Jorge Luis Borges")));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test
+    void deberiaFiltrarPorCategoria(){
+        Set<Libro> librosEsperados = Set.of(ficciones, elAleph, cienAniosDeSoledad);
+
+        Set<Libro> librosObtenidos = Set.copyOf(
+                catalogo.librosFiltrados(new BusquedaPorCategoria(Libro.Categoria.LITERATURA)));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test
+    void deberiaFiltrarPorIdioma(){
+        Set<Libro> librosEsperados = Set.of(ficciones, elAleph, cienAniosDeSoledad);
+
+        Set<Libro> librosObtenidos = Set.copyOf(
+                catalogo.librosFiltrados(new BusquedaPorIdioma(Libro.Idioma.CASTELLANO)));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test
+    void deberiaFiltrarUnicamenteLosLibrosDisponibles(){
+        Set<Libro> librosEsperados = Set.of(elPrincipito, ficciones, elAleph);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(new BusquedaPorDisponibilidad()));
+
+        assertEquals(librosEsperados, librosObtenidos);
     }
 
 }

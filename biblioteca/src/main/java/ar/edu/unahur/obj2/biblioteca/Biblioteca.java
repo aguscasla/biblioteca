@@ -182,7 +182,7 @@ public class Biblioteca {
 
     }
 
-    public void validarPrestamo(Usuario socio){
+    public void validarPrestamo(Usuario socio, Libro libro){
         
         if(estaInfringiendoLasNormas(socio)){
             throw new UsuarioInhabilitadoException();
@@ -196,6 +196,10 @@ public class Biblioteca {
             throw new UsuarioSinPrestamosDisponiblesException();
         }
 
+        if(libro.getEstado() != Libro.Estado.DISPONIBLE){
+            throw new LibroNoDisponibleException();
+        }
+
     }
 
     public ArrayList<Prestamo> prestamosEnCursoDelUsuario(Usuario socio){
@@ -204,14 +208,14 @@ public class Biblioteca {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void otorgarPrestamo(Integer idDelPrestamo, String dniDelUsuario, String tituloDelLibro, LocalDate fechaDeInicio,
+    public void otorgarPrestamo(Integer idDelPrestamo, String dniDelUsuario, Integer idDelLibro, LocalDate fechaDeInicio,
                                         LocalDate fechaDeLimite, Integer cantidadDeRenovaciones){
 
         Usuario socio = obtenerUsuario(dniDelUsuario);
 
-        Libro libro = catalogo.obtenerLibroDisponible(tituloDelLibro);
+        Libro libro = catalogo.obtenerLibro(idDelLibro);
 
-        validarPrestamo(socio);
+        validarPrestamo(socio, libro);
 
         Prestamo prestamo = new Prestamo(idDelPrestamo, socio, libro, fechaDeInicio, fechaDeLimite, cantidadDeRenovaciones);
 
@@ -234,12 +238,8 @@ public class Biblioteca {
         catalogo.eliminarLibro(idDelLibro);
     }
 
-    public Libro obtenerLibroDelCatalogo(Integer idDelLibro){
+    public Libro obtenerLibro(Integer idDelLibro){
         return catalogo.obtenerLibro(idDelLibro);
-    }
-
-    public Libro obtenerLibroDisponible(String tituloDelLibro){
-        return catalogo.obtenerLibroDisponible(tituloDelLibro);
     }
 
     // getters

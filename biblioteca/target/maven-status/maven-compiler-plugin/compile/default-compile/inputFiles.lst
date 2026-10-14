@@ -1,5 +1,11 @@
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\biblioteca\Biblioteca.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\biblioteca\Catalogo.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\criteriosDeBusqueda\BusquedaPorAutor.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\criteriosDeBusqueda\BusquedaPorCategoria.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\criteriosDeBusqueda\BusquedaPorDisponibilidad.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\criteriosDeBusqueda\BusquedaPorIdioma.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\criteriosDeBusqueda\BusquedaPorTitulo.java
+c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\criteriosDeBusqueda\CriterioDeBusqueda.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\FechaInvalidaException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\LibroInhabilitadoException.java
 c:\Users\cuent\Desktop\UNAHUR\POO2\Examples\bibliotecaProject\biblioteca\src\main\java\ar\edu\unahur\obj2\exceptions\LibroNoDisponibleException.java

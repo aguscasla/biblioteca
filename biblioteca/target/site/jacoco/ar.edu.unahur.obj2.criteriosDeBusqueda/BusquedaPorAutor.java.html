@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BusquedaPorAutor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">biblioteca</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unahur.obj2.criteriosDeBusqueda</a> &gt; <span class="el_source">BusquedaPorAutor.java</span></div><h1>BusquedaPorAutor.java</h1><pre class="source lang-java linenums">package ar.edu.unahur.obj2.criteriosDeBusqueda;
+
+import java.util.Objects;
+
+import ar.edu.unahur.obj2.libros.Libro;
+
+public class BusquedaPorAutor implements CriterioDeBusqueda{
+
+    private String autor;
+
+<span class="fc" id="L11">    public BusquedaPorAutor(String autor) {</span>
+<span class="fc" id="L12">        this.autor = Objects.requireNonNull(autor, &quot;El autor es obligatorio&quot;);</span>
+<span class="fc" id="L13">    }</span>
+
+    @Override
+    public Boolean coincide(Libro libro) {
+<span class="fc" id="L17">        return libro.getAutor().equals(autor);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

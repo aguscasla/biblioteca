@@ -41,7 +41,7 @@ public class Prestamo {
         }
 
 <span class="fc bfc" id="L43" title="All 4 branches covered.">        if(fechaDeInicio.isEqual(fechaLimite) || fechaDeInicio.isAfter(fechaLimite)){</span>
-<span class="fc" id="L44">            throw new FechaInvalidaException(&quot;La fecha no es valida&quot;);</span>
+<span class="fc" id="L44">            throw new FechaInvalidaException();</span>
         }
 
 <span class="fc bfc" id="L47" title="All 2 branches covered.">        if(id &lt;= 0){</span>
@@ -56,7 +56,7 @@ public class Prestamo {
 
     public void descontarRenovacion() {
 <span class="fc bfc" id="L58" title="All 2 branches covered.">        if(cantidadDeRenovaciones == 0){</span>
-<span class="fc" id="L59">            throw new PrestamoSinRenovacionesDisponiblesException(&quot;El prestamo no cuenta con renovaciones disponibles&quot;);</span>
+<span class="fc" id="L59">            throw new PrestamoSinRenovacionesDisponiblesException();</span>
         }
 
 <span class="fc" id="L62">        this.cantidadDeRenovaciones -= 1;</span>
@@ -64,7 +64,7 @@ public class Prestamo {
 
     public void finalizarPrestamo(){
 <span class="fc bfc" id="L66" title="All 2 branches covered.">        if(estado == Estado.FINALIZADO){</span>
-<span class="fc" id="L67">            throw new PrestamoFinalizadoException(&quot;El prestamo se encuentra finalizado&quot;);</span>
+<span class="fc" id="L67">            throw new PrestamoFinalizadoException();</span>
         }
         
 <span class="fc" id="L70">        estado = Estado.FINALIZADO;</span>

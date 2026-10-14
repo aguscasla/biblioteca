@@ -68,7 +68,7 @@ public class Libro {
 <span class="fc" id="L68">        this.fechaDePublicacion = Objects.requireNonNull(fechaDePublicacion, &quot;La fecha de publicacion es obligatoria&quot;);</span>
 <span class="fc" id="L69">        this.cantidadDePaginas = Objects.requireNonNull(cantidadDePaginas, &quot;La cantidad de paginas es obligatoria&quot;);</span>
 <span class="fc" id="L70">        this.idioma = Objects.requireNonNull(idioma, &quot;El idioma es obligatorio&quot;);</span>
-<span class="fc" id="L71">        this.id = id;</span>
+<span class="fc" id="L71">        this.id = Objects.requireNonNull(id, &quot;El id es obligatorio&quot;);</span>
 
 <span class="fc bfc" id="L73" title="All 2 branches covered.">        if(cantidadDePaginas &lt;= 0){</span>
 <span class="fc" id="L74">            throw new IllegalArgumentException(&quot;La cantidad de paginas es invalida&quot;);</span>
@@ -83,7 +83,7 @@ public class Libro {
 
     public void habilitar(){
 <span class="fc bfc" id="L85" title="All 2 branches covered.">        if(estado == Estado.INHABILITADO){</span>
-<span class="fc" id="L86">            throw new LibroInhabilitadoException(&quot;El libro se encuentra inhabilitado&quot;);</span>
+<span class="fc" id="L86">            throw new LibroInhabilitadoException();</span>
         }
 
 <span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if(estado != Estado.DISPONIBLE){</span>
@@ -94,7 +94,7 @@ public class Libro {
 
     public void prestar(){
 <span class="fc bfc" id="L96" title="All 2 branches covered.">        if(estado != Estado.DISPONIBLE){</span>
-<span class="fc" id="L97">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
+<span class="fc" id="L97">            throw new LibroNoDisponibleException();</span>
         }
 
 <span class="fc" id="L100">        this.estado = Estado.PRESTADO;</span>
@@ -102,7 +102,7 @@ public class Libro {
 
     public void reparar(){
 <span class="fc bfc" id="L104" title="All 2 branches covered.">        if(estado != Estado.DISPONIBLE){</span>
-<span class="fc" id="L105">            throw new LibroNoDisponibleException(&quot;El libro no se encuentra disponible&quot;);</span>
+<span class="fc" id="L105">            throw new LibroNoDisponibleException();</span>
         }
 
 <span class="fc" id="L108">        this.estado = Estado.EN_REPARACION;</span>
@@ -110,7 +110,7 @@ public class Libro {
 
     public void inhabilitar(){
 <span class="fc bfc" id="L112" title="All 2 branches covered.">        if(estado == Estado.INHABILITADO){</span>
-<span class="fc" id="L113">            throw new LibroInhabilitadoException(&quot;El libro se encuentra inhabilitado&quot;);</span>
+<span class="fc" id="L113">            throw new LibroInhabilitadoException();</span>
         }
 
 <span class="fc" id="L116">        this.estado = Estado.INHABILITADO;</span>
@@ -129,11 +129,11 @@ public class Libro {
     }
 
     public String getAutor() {
-<span class="nc" id="L132">        return autor;</span>
+<span class="fc" id="L132">        return autor;</span>
     }
 
     public Categoria getCategoria() {
-<span class="nc" id="L136">        return categoria;</span>
+<span class="fc" id="L136">        return categoria;</span>
     }
 
     public LocalDate getFechaDePublicacion() {
@@ -145,7 +145,7 @@ public class Libro {
     }
 
     public Idioma getIdioma() {
-<span class="nc" id="L148">        return idioma;</span>
+<span class="fc" id="L148">        return idioma;</span>
     } 
 
 }
