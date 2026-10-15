@@ -3,6 +3,7 @@ package biblioteca;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -17,6 +18,7 @@ import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorCategoria;
 import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorDisponibilidad;
 import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorIdioma;
 import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorTitulo;
+import ar.edu.unahur.obj2.criteriosDeBusqueda.CriterioDeBusqueda;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
 import ar.edu.unahur.obj2.exceptions.LibroYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
@@ -161,6 +163,112 @@ public class CatalogoTest {
         Set<Libro> librosEsperados = Set.of(elPrincipito, ficciones, elAleph);
 
         Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(new BusquedaPorDisponibilidad()));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test 
+    void deberiaFiltrarLosLibrosQueCoincidenEnAutorEIdioma(){
+        Set<Libro> librosEsperados = Set.of(ficciones, elAleph);
+                
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            new BusquedaPorAutor("Jorge Luis Borges").y(
+                new BusquedaPorIdioma(Libro.Idioma.CASTELLANO)
+            )
+        ));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test 
+    void deberiaFiltrarUnaColeccionVaciaCombinandoDosCriterios_SiNingunLibroCoincideEnAutorEIdioma(){
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            new BusquedaPorAutor("Jorge Luis Borges").y(
+                new BusquedaPorIdioma(Libro.Idioma.INGLES)
+            )
+        ));
+
+        assertTrue(librosObtenidos.isEmpty());
+    }
+
+    @Test 
+    void deberiaFiltrarLosLibrosQueCoincidenEnAutorIdiomaYCategoria(){
+        Set<Libro> librosEsperados = Set.of(elPrincipito);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            new BusquedaPorAutor("Antoine de Saint-Exupery").y(
+                new BusquedaPorIdioma(Libro.Idioma.FRANCES).y(
+                    new BusquedaPorCategoria(Libro.Categoria.FANTASIA)
+                )
+            )
+        ));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test 
+    void deberiaFiltrarLosLibrosQueCoincidenEnAutorOTitulo(){
+        Set<Libro> librosEsperados = Set.of(ficciones, dune);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            new BusquedaPorAutor("Frank Herbert").o(
+                new BusquedaPorTitulo("Ficciones")
+            )
+        ));
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test 
+    void deberiaFiltrarLosLibrosQueNoCoincidenEnIdioma(){
+        Set<Libro> librosEsperados = Set.of(elPrincipito, dune);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            new BusquedaPorIdioma(Libro.Idioma.CASTELLANO).no()
+            )
+        );
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test 
+    void deberiaFiltrarLosLibrosQueCoincidenEnIdiomaOCategoriaPeroNoEnAutor(){
+        Set<Libro> librosEsperados = Set.of(cienAniosDeSoledad, dune);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            (new BusquedaPorIdioma(Libro.Idioma.CASTELLANO).o(
+                new BusquedaPorCategoria(Libro.Categoria.CIENCIA_FICCION)).y(
+                    new BusquedaPorAutor("Jorge Luis Borges").no()
+                )
+            )
+            )
+        );
+
+        assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test 
+    void deberiaFiltrarUnaColeccionVacia_SiNingunLibroCoincideEnIdiomaOTitulo(){
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            new BusquedaPorIdioma(Libro.Idioma.PORTUGUES).o(
+                new BusquedaPorTitulo("Harry Potter, El Caliz de Fuego")
+            )
+            )
+        );
+
+        assertTrue(librosObtenidos.isEmpty());
+    }
+
+    @Test 
+    void deberiaFiltrarLosLibrosQueNoCumplenAmbosCriteriosDeAutorEIdioma(){
+        Set<Libro> librosEsperados = Set.of(elPrincipito, dune, cienAniosDeSoledad);
+
+        Set<Libro> librosObtenidos = Set.copyOf(catalogo.librosFiltrados(
+            (new BusquedaPorIdioma(Libro.Idioma.CASTELLANO).y(
+                new BusquedaPorAutor("Jorge Luis Borges")).no()
+            )
+            )
+        );
 
         assertEquals(librosEsperados, librosObtenidos);
     }
