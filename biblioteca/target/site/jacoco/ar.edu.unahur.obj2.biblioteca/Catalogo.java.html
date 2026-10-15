@@ -3,54 +3,57 @@
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ar.edu.unahur.obj2.criteriosDeBusqueda.CriterioDeBusqueda;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
 import ar.edu.unahur.obj2.exceptions.LibroYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
 
-<span class="fc" id="L12">public class Catalogo {</span>
+<span class="fc" id="L13">public class Catalogo {</span>
 
-<span class="fc" id="L14">    private Map&lt;Integer, Libro&gt; catalogo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L15">    private Map&lt;Integer, Libro&gt; catalogo = new HashMap&lt;&gt;();</span>
 
     public void agregarLibro(Libro libro){
 
-<span class="fc bfc" id="L18" title="All 2 branches covered.">        if(libro == null){</span>
-<span class="fc" id="L19">            throw new IllegalArgumentException(&quot;El libro es invalido&quot;);</span>
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        if(libro == null){</span>
+<span class="fc" id="L20">            throw new IllegalArgumentException(&quot;El libro es invalido&quot;);</span>
         }
 
-<span class="fc bfc" id="L22" title="All 2 branches covered.">        if(catalogo.containsKey(libro.getId())){</span>
-<span class="fc" id="L23">            throw new LibroYaRegistradoException();</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if(catalogo.containsKey(libro.getId())){</span>
+<span class="fc" id="L24">            throw new LibroYaRegistradoException();</span>
         }
 
-<span class="fc" id="L26">        catalogo.put(libro.getId(), libro);</span>
+<span class="fc" id="L27">        catalogo.put(libro.getId(), libro);</span>
 
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L29">    }</span>
 
     public void eliminarLibro(Integer idDelLibro){
-<span class="fc" id="L31">        Libro libro = catalogo.get(idDelLibro);</span>
+<span class="fc" id="L32">        Libro libro = catalogo.get(idDelLibro);</span>
 
-<span class="fc bfc" id="L33" title="All 2 branches covered.">        if(libro == null){</span>
-<span class="fc" id="L34">            throw new LibroNoRegistradoException();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if(libro == null){</span>
+<span class="fc" id="L35">            throw new LibroNoRegistradoException();</span>
         }
 
-<span class="fc" id="L37">        catalogo.remove(idDelLibro);</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L38">        catalogo.remove(idDelLibro);</span>
+<span class="fc" id="L39">    }</span>
 
     public Libro obtenerLibro(Integer idDelLibro){
-<span class="fc" id="L41">        Libro libro = catalogo.get(idDelLibro);</span>
+<span class="fc" id="L42">        Libro libro = catalogo.get(idDelLibro);</span>
 
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        if(libro == null){</span>
-<span class="fc" id="L44">            throw new LibroNoRegistradoException();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if(libro == null){</span>
+<span class="fc" id="L45">            throw new LibroNoRegistradoException();</span>
         }
 
-<span class="fc" id="L47">        return libro;</span>
+<span class="fc" id="L48">        return libro;</span>
     }
 
     public List&lt;Libro&gt; librosFiltrados(CriterioDeBusqueda criteriosDeBusqueda){
-<span class="fc" id="L51">        return catalogo.values().stream()</span>
-<span class="fc" id="L52">                .filter(libro -&gt; criteriosDeBusqueda.coincide(libro))</span>
-<span class="fc" id="L53">                .toList();</span>
+<span class="fc" id="L52">        Objects.requireNonNull(criteriosDeBusqueda, &quot;El criterio de busqueda no puede ser null&quot;);</span>
+        
+<span class="fc" id="L54">        return catalogo.values().stream()</span>
+<span class="fc" id="L55">                .filter(libro -&gt; criteriosDeBusqueda.coincide(libro))</span>
+<span class="fc" id="L56">                .toList();</span>
     }
 
 }

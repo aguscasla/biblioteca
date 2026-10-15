@@ -18,7 +18,6 @@ import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorCategoria;
 import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorDisponibilidad;
 import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorIdioma;
 import ar.edu.unahur.obj2.criteriosDeBusqueda.BusquedaPorTitulo;
-import ar.edu.unahur.obj2.criteriosDeBusqueda.CriterioDeBusqueda;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
 import ar.edu.unahur.obj2.exceptions.LibroYaRegistradoException;
 import ar.edu.unahur.obj2.libros.Libro;
@@ -271,6 +270,13 @@ public class CatalogoTest {
         );
 
         assertEquals(librosEsperados, librosObtenidos);
+    }
+
+    @Test 
+    void deberiaLanzarUnaExcepcionAlFiltrarLibros_SiSePasaUnCriterioNulo(){
+        Executable act = () -> catalogo.librosFiltrados(null);
+
+        assertThrows(NullPointerException.class, act);
     }
 
 }

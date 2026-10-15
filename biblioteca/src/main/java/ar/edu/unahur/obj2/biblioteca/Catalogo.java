@@ -3,6 +3,7 @@ package ar.edu.unahur.obj2.biblioteca;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ar.edu.unahur.obj2.criteriosDeBusqueda.CriterioDeBusqueda;
 import ar.edu.unahur.obj2.exceptions.LibroNoRegistradoException;
@@ -48,6 +49,8 @@ public class Catalogo {
     }
 
     public List<Libro> librosFiltrados(CriterioDeBusqueda criteriosDeBusqueda){
+        Objects.requireNonNull(criteriosDeBusqueda, "El criterio de busqueda no puede ser null");
+        
         return catalogo.values().stream()
                 .filter(libro -> criteriosDeBusqueda.coincide(libro))
                 .toList();
