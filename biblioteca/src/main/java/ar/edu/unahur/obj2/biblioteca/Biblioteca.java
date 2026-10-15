@@ -4,6 +4,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -245,11 +246,11 @@ public class Biblioteca {
     // getters
 
     public Map<String, Usuario> getSocios() {
-        return socios;
+        return Map.copyOf(socios);
     }
 
-    public ArrayList<Prestamo> getPrestamos() {
-        return prestamos;
+    public List<Prestamo> getPrestamos() {
+        return List.copyOf(prestamos);
     }
 
 }
