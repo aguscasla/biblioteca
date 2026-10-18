@@ -1,102 +1,94 @@
 # Biblioteca
-Un sistema de biblioteca capaz de otorgar préstamos de libros hacia sus socios.
 
-## Acerca de la biblioteca
-La biblioteca tendrá un catálogo de todos sus libros, una lista de sus socios identificados por dni, una lista de los préstamos dados. Los libros podrán prestarse únicamente a los socios activos de la biblioteca, estos socios pueden pedir una cantidad limitada de libros, si el tiempo límite se les acaba también podrán renovarlo. 
-El sistema registra a una persona cuando se asocia por primera vez a la biblioteca. Ese registro se conserva aunque deje de ser socio. Cada socio tiene un estado: activo, baja voluntaria o inhabilitado. Una persona con baja voluntaria puede volver a asociarse; una persona inhabilitada por incumplir las normas no puede volver a hacerlo. Las personas que no están registradas en la colección no pertenecen al sistema.
+Sistema de gestión de biblioteca para administrar socios, catálogo y préstamos.
 
-## ¿Qué se sabe de un libro?
-Un libro esta compuesto por varios atributos, y son los siguientes:
-* Título
-* Autor
-* Categoría
-* Género (en caso de los libros de literatura)
-* Fecha de publicación
-* Estado
-* ID
-* Cantidad de páginas
-* Idioma
+## Funcionalidades
 
-Ademas, cada ID debe ser único por libro. Los estados de un libro pueden ser los siguientes; disponible, prestado, en reparación, e inhabilitado, este último no permite al libro ser agregado de nuevo al catálogo.
+- **Socios:** registrar, dar de baja, reactivar e inhabilitar socios; consultar y evaluar su estado.
+- **Catálogo:** agregar, consultar y eliminar libros; buscar y filtrar títulos.
+- **Préstamos:** otorgar, renovar, finalizar y consultar préstamos, validando las condiciones correspondientes.
 
-## Acerca del usuario
-Un usuario puede existir o iniciar el trámite de asociación sin ser todavía socia. El sistema la registra en la colección de socios cuando la biblioteca formaliza su alta por primera vez. Esa alta no requiere requisitos previos. Desde ese momento, la persona queda registrada de forma permanente y su estado inicial es activo.
-Del usuario se conoce sus siguientes datos:
-* Nombre
-* Apellido
-* DNI
-* Edad
-* Teléfono
-* Correo electrónico
-* Límite de préstamos
-* Estado (activo, inhabilitado, baja voluntaria)
+## Entidades
 
-Aparte de sus datos, el sistema debe conocer si este se encuentra asociado o no a la biblioteca, al igual que su historial de préstamos. El límite de préstamos corresponde a la cantidad de libros que puede tener en posesóon al mismo tiempo, si llega al límite no puede pedir algún otro libro hasta que se devuelvan los anteriores. Un socio con baja voluntaria puede volver a asociarse. Una persona inhabilitada por incumplir las normas no puede volver a asociarse.
+### Usuario
 
-## El funcionamiento de los préstamos
-Cada préstamo representa la entrega de un ejemplar físico a un socio. El préstamo queda registrado en un único historial general de la biblioteca. Los préstamos en curso se obtienen filtrando ese historial por estado; los de un socio, buscando los préstamos asociados a su DNI o a su registro de socio. Así se evita guardar y actualizar el mismo préstamo en varios historiales.
+Se registran nombre, apellido, DNI, edad, teléfono, correo electrónico, límite de préstamos y estado. Al crear un usuario, su límite es cero y su estado es `NO_REGISTRADO`. Al asociarlo a la biblioteca se establece el límite y pasa a `ACTIVO`.
 
-### Atributos de un préstamo
-* ID: identificador único del préstamo.
-* Socio: socio al que se entregó el ejemplar.
-* Ejemplar: libro físico prestado, identificado por su ID.
-* Fecha de inicio: día en que se realiza el préstamo.
-* Fecha límite: último día para devolverlo sin atraso.
-* Fecha de devolución: se completa cuando el ejemplar es devuelto; mientras siga en curso, queda vacía.
-* Cantidad de renovaciones: número de veces que se extendió el préstamo.
+Estados:
 
-### Estado y vencimiento
-Un préstamo tiene uno de estos estados:
-* En curso: el ejemplar todavía no fue devuelto.
-* Finalizado: el ejemplar fue devuelto.
+- `ACTIVO`: puede solicitar préstamos si cumple las reglas.
+- `BAJA_VOLUNTARIA`: no puede solicitar préstamos; puede volver a asociarse.
+- `INHABILITADO`: no puede solicitar préstamos ni volver a asociarse.
+- `NO_REGISTRADO`: todavía no es socio y no puede solicitar préstamos.
 
-Un préstamo en curso está **vencido** si la fecha actual es posterior a su fecha límite. El vencimiento es una condición calculada, no un estado que reemplace a “en curso”: un préstamo vencido sigue ocupando un lugar del límite del socio hasta que se devuelve el ejemplar.
-Al devolverlo, el préstamo pasa a finalizado y se registra la fecha de devolución. El historial conserva el préstamo y permite determinar si se devolvió a tiempo o con atraso.
+### Préstamo
 
-### Reglas para otorgar un préstamo
-El sistema otorga un préstamo solo si se cumplen todas estas condiciones:
-1. El usuario sea socio activo.
-2. El socio no está inhabilitado ni tiene una restricción que le impida solicitar préstamos.
-3. No alcanzó su límite de ejemplares en posesión. Para calcularlo, se cuentan todos sus préstamos en curso, incluidos los vencidos.
-4. El ejemplar existe y está disponible.
+Registra ID, socio, ejemplar, fecha de inicio, fecha límite, fecha de devolución, cantidad de renovaciones y estado. La fecha de devolución se establece al finalizar el préstamo; inicialmente no tiene valor. El estado inicial es `EN_CURSO`.
 
-Al otorgar el préstamo, el sistema registra su fecha de inicio y fecha límite, lo agrega al historial general y cambia el estado del ejemplar a **prestado**.
+- `EN_CURSO`: el préstamo sigue activo.
+- `FINALIZADO`: el préstamo fue devuelto.
 
-### Renovación
-Un préstamo puede renovarse **una sola vez**, siempre que:
-* siga en curso;
-* no esté vencido;
-* el socio solicite la renovación durante los dos días anteriores a la fecha límite, incluidos esos dos días;
-* el ejemplar no tenga una reserva pendiente de otro socio.
+### Libro
 
-La renovación extiende la fecha límite siete días a partir de la fecha límite vigente. Por ejemplo, si vence el 10/08, al renovarlo pasa a vencer el 17/08. La renovación se registra aumentando la cantidad de renovaciones.
+Registra ID, título, autor, categoría, fecha de publicación, cantidad de páginas, idioma y estado. El estado inicial es `DISPONIBLE`.
 
-### Devolución
-Al recibir el ejemplar, el sistema registra la fecha de devolución y finaliza el préstamo. La devolución no borra ni modifica el historial del préstamo.
+- `DISPONIBLE`: puede prestarse.
+- `PRESTADO`: está asociado a un préstamo en curso; vuelve a estar disponible al finalizarlo.
+- `EN_REPARACION`: no puede prestarse; puede volver a estar disponible.
+- `INHABILITADO`: no puede prestarse ni volver a estar disponible.
 
-### Relación con el historial del socio
-El historial de un socio se consulta a partir del historial general de préstamos. Incluye tanto préstamos finalizados como préstamos en curso. La cantidad de ejemplares que tiene en posesión se calcula contando sus préstamos en curso; no hace falta mantener una segunda lista de libros en posesión, porque podría quedar desactualizada respecto de los préstamos.
+## Reglas de la biblioteca
 
-### Vencimientos e inhabilitación
-El sistema conserva todos los préstamos vencidos, estén devueltos o sigan en curso. Para aplicar sanciones, se deben contar por separado:
-* **Préstamos vencidos devueltos:** préstamos finalizados cuya devolución fue posterior a la fecha límite.
-* **Préstamos vencidos pendientes:** préstamos en curso cuya fecha límite ya pasó.
+### Implementadas
 
-## Reglas de negocio.
-El sistema debera responder si un libro, segun su codigo identificador, esta disponible para un prestamo. Tambien debe dar de alta y baja a los socios, agregar y eliminar libros del catálogo. Cada tanto, el sistema puede revisar uno por uno a sus socios, y evaluar asi quienes pueden ser dados de baja y quedar inhabilitados si no cumplen ciertas condiciones. 
+- No se otorgan préstamos a usuarios que estén de baja voluntaria, inhabilitados o no registrados.
+- No se otorgan préstamos si el socio tiene tres o más préstamos devueltos fuera de término, un préstamo en curso con más de siete días de demora o si alcanzó su límite de préstamos.
+- No se otorgan préstamos de libros que no estén disponibles.
+- No se renuevan préstamos vencidos ni préstamos cuya fecha límite esté a más de dos días.
+- Los usuarios asociados permanecen registrados en la biblioteca aunque cambie su estado.
+- La evaluación de usuarios inhabilita a quienes incumplen las reglas de demora.
 
-## Baja automatica a un socio.
-La baja automática se aplica si el socio acumula tres o más préstamos vencidos devueltos, o si mantiene al menos un ejemplar sin devolver durante más de siete días después de su fecha límite. Un préstamo que continúa en curso no se cuenta también como un préstamo vencido devuelto. Al inhabilitar al socio, el préstamo pendiente sigue registrado y el ejemplar continúa figurando como prestado hasta su devolución.
+### Pendientes de implementar
 
-## Ejemplos de préstamos
-### Préstamo y renovación
+- Impedir la renovación si el socio incumple las reglas para solicitar préstamos o está de baja voluntaria o inhabilitado.
+- Verificar las reglas de solicitud de préstamos al volver a asociar a un usuario.
 
-Un socio activo solicita un ejemplar disponible y cumple las condiciones para pedirlo. El sistema registra el préstamo con su fecha de inicio y fecha límite, y marca el ejemplar como prestado.
+## Búsqueda y filtrado
 
-Si el socio solicita renovar dentro del plazo permitido y cumple las condiciones, el sistema extiende la fecha límite siete días. La renovación queda registrada en el mismo préstamo.
+El catálogo permite buscar por coincidencia exacta de autor o título, y filtrar por categoría, disponibilidad e idioma. Los criterios se pueden combinar con `y`, `o` y `no`.
 
-### Préstamo vencido y devolución
+```java
+CriterioDeBusqueda criterio = new BusquedaPorAutor("J. K. Rowling")
+    .y(new BusquedaPorCategoria(Libro.Categoria.FANTASIA));
+```
 
-Un socio conserva un ejemplar después de su fecha límite. El préstamo sigue en curso, pero se considera vencido; continúa contando para el límite de préstamos del socio y el ejemplar sigue prestado.
+```java
+CriterioDeBusqueda criterio = new BusquedaPorIdioma(Libro.Idioma.INGLES).no();
+```
 
-Al devolverlo, el sistema registra la fecha de devolución y finaliza el préstamo. El ejemplar queda disponible si está en condiciones de circular; si necesita reparación, pasa a estar en reparación.
+```java
+CriterioDeBusqueda autor = new BusquedaPorAutor("J. K. Rowling");
+CriterioDeBusqueda idioma = new BusquedaPorIdioma(Libro.Idioma.CASTELLANO);
+CriterioDeBusqueda disponible = new BusquedaPorDisponibilidad();
+
+CriterioDeBusqueda combinado = autor.o(idioma).y(disponible);
+```
+
+## Requisitos
+
+- Java 21
+- Maven
+
+## Compilar y ejecutar las pruebas
+
+Desde la carpeta raíz del proyecto, ejecutá:
+
+```bash
+mvn -f biblioteca/pom.xml clean test
+```
+
+## Información del proyecto
+
+- Creadora: Agustina Emilia Agüero
+- Versión: 1.1.0
+- Última actualización: 2026-10-17
